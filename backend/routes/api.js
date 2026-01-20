@@ -121,10 +121,47 @@ router.post('/register-winner', async (req, res) => {
 
     } catch (error) {
         console.error("Error al registrar ganador:", error);
-        // Si falló guardar el ganador pero el código se marcó usado, habría que hacer rollback manual
-        // o usar transacciones de Mongo (disponibles en Atlas). 
-        // Para simplificar, asumimos estabilidad de BD aquí, pero en PROD con Atlas usaremos Sessions.
+        // Si falló guardar el ganador pero el código se marcó usado, habría que    // Si falló guardar el ganador...
         res.status(500).json({ success: false, message: "Error al procesar el premio." });
+    }
+});
+
+/**
+ * 📥 RUTA 3: DESCARGAR GANADORES (EXCEL/CSV)
+ * URL: GET /api/descargar-ganadores?clave=ADMIN_SECRETO
+ */
+router.get('/descargar-ganadores', async (req, res) => {
+    try {
+        // 1. Candado de seguridad básico
+        if (req.query.clave !== 'ADMIN_LACASERA_2026') {
+            return res.status(403).send("⛔ Acceso denegado. Te falta la clave secreta.");
+        }
+
+        // 2. Buscar todos los ganadores
+        const winners = await Winner.find().sort({ createdAt: -1 });
+
+        // 3. Crear el CSV (manual para no instalar más librerías)
+        // Cabeceras
+        let csv = "Nombre,Email,Telefono,Direccion,Premio,Codigo,Fecha\n";
+
+        // Filas
+        winners.forEach(w => {
+            // Limpiamos comas o saltos de línea para que no rompan el Excel
+            const clean = (text) => text ? `"${text.toString().replace(/"/g, '""')}"` : "";
+
+            const fecha = w.createdAt ? w.createdAt.toISOString().split('T')[0] : "";
+
+            csv += `${clean(w.nombre)},${clean(w.email)},${clean(w.telefono)},${clean(w.direccion)},${clean(w.prizeWon)},${clean(w.winningCode)},${fecha}\n`;
+        });
+
+        // 4. Enviar el archivo
+        res.header('Content-Type', 'text/csv');
+        res.header('Content-Disposition', 'attachment; filename="ganadores_lacasera.csv"');
+        res.send(csv);
+
+    } catch (error) {
+        console.error("Error al generar CSV:", error);
+        res.status(500).send("Error generando el archivo");
     }
 });
 
