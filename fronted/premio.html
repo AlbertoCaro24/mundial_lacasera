@@ -69,7 +69,7 @@
             data.code = winningCode; // Añadimos el código a los datos a enviar
 
             try {
-                const response = await fetch('http://localhost:3000/api/register-winner', {
+                const response = await fetch('https://lacasera-backend.onrender.com/api/register-winner', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
