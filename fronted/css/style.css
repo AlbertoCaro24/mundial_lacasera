@@ -1,0 +1,275 @@
+:root {
+    --primary-red: #D2001E;
+    /* Approximate red from the image/brand */
+    --text-color: #333;
+    --gray-light: #ddd;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+    /* Condensed font style */
+    color: var(--primary-red);
+    text-transform: uppercase;
+    font-size: 2.5rem;
+    /* Adjustable */
+    margin-bottom: 3rem;
+    font-weight: 700;
+}
+
+.promo-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Input Styles */
+.input-group {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.input-group input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--gray-light);
+    padding: 0.5rem 0;
+    font-size: 1.2rem;
+    outline: none;
+    transition: border-color 0.3s;
+    color: var(--text-color);
+}
+
+.input-group input::placeholder {
+    color: var(--primary-red);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    /* Match previous label size */
+    opacity: 1;
+    /* Firefox */
+}
+
+.input-group input:focus {
+    border-bottom-color: var(--primary-red);
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    text-align: left;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #666;
+    user-select: none;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    /* Optional rounded */
+}
+
+.checkbox-container input:checked~.checkmark {
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked~.checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container a {
+    color: var(--primary-red);
+    /* "bases legales" in red */
+    text-decoration: none;
+}
+
+.checkbox-container a:hover {
+    text-decoration: underline;
+}
+
+/* Button Styles */
+.submit-btn {
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 5px;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #b00018;
+}
+
+/* Legal Page specific styles */
+.legal-page {
+    align-items: flex-start;
+    /* Allow scrolling for long content */
+    padding-top: 2rem;
+}
+
+.legal-container {
+    text-align: left;
+    background-color: #fff;
+    max-width: 800px;
+}
+
+.legal-text h2 {
+    color: var(--primary-red);
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.legal-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Result Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.modal-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.close-modal {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.close-modal:hover {
+    background-color: #555;
+}

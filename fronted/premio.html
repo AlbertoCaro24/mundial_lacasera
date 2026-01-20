@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reclama tu Premio · La Casera</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <main class="container">
+        <h1>¡ENHORABUENA! RECLAMA TU PREMIO</h1>
+        <p style="margin-bottom: 2rem; color: #555;">Rellena tus datos para recibir tu pack de La Roja.</p>
+
+        <form action="#" method="POST" class="promo-form">
+            <div class="input-group">
+                <input type="text" id="nombre" name="nombre" placeholder="NOMBRE *" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="apellidos" name="apellidos" placeholder="APELLIDOS *" required>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="EMAIL *" required>
+            </div>
+
+            <div class="input-group">
+                <input type="tel" id="telefono" name="telefono" placeholder="TELÉFONO *" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="direccion" name="direccion" placeholder="DIRECCIÓN COMPLETA *" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="cp" name="cp" placeholder="CÓDIGO POSTAL *" required>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="ciudad" name="ciudad" placeholder="CIUDAD *" required>
+            </div>
+
+            <button type="submit" class="submit-btn">SOLICITAR PREMIO &rarr;</button>
+        </form>
+    </main>
+
+    <script>
+        document.querySelector('.promo-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Recuperamos el código ganador guardado
+            const winningCode = localStorage.getItem('winningCode');
+            if (!winningCode) {
+                alert('No se encontró el código premiado. Por favor, vuelve a introducirlo.');
+                window.location.href = 'index.html';
+                return;
+            }
+            data.code = winningCode; // Añadimos el código a los datos a enviar
+
+            try {
+                const response = await fetch('http://localhost:3000/api/register-winner', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Limpiamos el código usado
+                    localStorage.removeItem('winningCode');
+                    window.location.href = 'gracias.html';
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hubo un problema al conectar con el servidor.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

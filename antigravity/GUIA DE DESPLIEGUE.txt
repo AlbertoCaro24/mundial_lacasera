@@ -1,0 +1,40 @@
+Guía de Despliegue Profesional: La Casera Mundial 2026
+Esta guía detalla los pasos para llevar el sistema a un entorno de Producción Real (24/7, Seguro, Escalable).
+
+1. El Corazón: Base de Datos (MongoDB Atlas)
+Para que el sistema sea profesional "de verdad", no podemos guardar los datos en un archivo local (se borrarían al reiniciar el servidor en la nube). Usaremos MongoDB Atlas (Líder mundial en bases de datos gestionadas).
+
+Pasos:
+Crear cuenta en MongoDB Atlas.
+Crear un Cluster Gratuito (M0) (Suficiente para empezar, escalable con un clic).
+En "Security" > "Database Access", crear un usuario (ej: admin) y contraseña segura.
+En "Security" > "Network Access", añadir 0.0.0.0/0 (Permitir acceso desde cualquier lugar, necesario para Render).
+Ir a "Database", dar a Connect > Drivers > copiar la Connection String.
+Será algo así: mongodb+srv://admin:<password>@cluster0.abcde.mongodb.net/?retryWrites=true&w=majority
+2. El Cerebro: Servidor Cloud (Render)
+Usaremos Render porque conecta automáticamente con GitHub y despliega cada cambio que hagas.
+
+Pasos:
+Crear cuenta en Render.com.
+Nuevo "Web Service".
+Conectar tu repositorio de GitHub.
+Configuración:
+Root Directory: backend (Importante, porque tu código está en esa carpeta).
+Build Command: npm install
+Start Command: node server.js
+Environment Variables (Las claves secretas):
+MONGO_URI: (Pega aquí la URL que copiaste de Mongo).
+PORT: 3000 (Opcional, Render lo asigna solo, pero bueno ponerlo).
+3. Pruebas Reales (Simulación)
+Antes de lanzar, ejecutamos el script de estrés:
+
+node scripts/simulate_load.js
+Esto lanzará 2000 peticiones contra tu servidor local (o el de producción si cambiamos la URL) para verificar que el sistema "anti-trampas" (Rate Limiting) salta y que la base de datos aguanta.
+
+TIP
+
+Dominio Final: Una vez en Render, tendrás una URL tipo https://lacasera-backend.onrender.com. Solo tendrás que cambiar esa URL en tu 
+index.html
+ y 
+premio.html
+ y listo. Web profesional operativa.

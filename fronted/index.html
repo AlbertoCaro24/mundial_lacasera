@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Casera · Mundial 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <main class="container">
+    <h1>COMPRUEBA TU CÓDIGO PROMOCIONAL</h1>
+
+    <form action="#" method="POST" class="promo-form">
+      <div class="input-group">
+        <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required>
+      </div>
+
+      <div class="checkbox-group">
+        <label class="checkbox-container">
+          <input type="checkbox" name="mayor_edad" required>
+          <span class="checkmark"></span>
+          Soy mayor de 16 años
+        </label>
+
+        <label class="checkbox-container">
+          <input type="checkbox" name="autorizacion">
+          <span class="checkmark"></span>
+          Soy menor de 16 años pero tengo autorización
+        </label>
+
+        <label class="checkbox-container">
+          <input type="checkbox" name="bases_legales" required>
+          <span class="checkmark"></span>
+          He leído y acepto las&nbsp;<a href="bases-legales.html" target="_blank">bases legales</a>.
+        </label>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">ENVIAR &rarr;</button>
+    </form>
+  </main>
+
+  <!-- Result Modal -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content">
+      <h2 id="modalTitle">RESULTADO</h2>
+      <p id="modalMessage">Mensaje del resultado</p>
+      <button class="close-modal" id="closeModal">CERRAR</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('.promo-form');
+      const modal = document.getElementById('resultModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const closeModal = document.getElementById('closeModal');
+
+      // Close modal and reset input
+      function closeAndReset() {
+        modal.classList.remove('active');
+        const codigoInput = document.getElementById('codigo');
+        codigoInput.value = '';
+        codigoInput.focus();
+      }
+
+      // Close modal event
+      closeModal.addEventListener('click', closeAndReset);
+
+      // Close on click outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeAndReset();
+        }
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const codigoInput = document.getElementById('codigo');
+        const codigo = codigoInput.value.trim();
+
+        if (!codigo) {
+          return; // HTML5 'required' should handle this, but double check
+        }
+
+        try {
+          const response = await fetch('http://localhost:3000/api/check-code', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: codigo })
+          });
+
+          const data = await response.json();
+
+          if (!data.success) {
+            // Si success es false, mostramos el mensaje de error (ej: código no válido o ya usado)
+            showModal('ATENCIÓN', data.message);
+          } else if (data.isPrize) {
+            // ¡Premio! Guardamos el código para la siguiente página
+            localStorage.setItem('winningCode', codigo);
+            window.location.href = 'premio.html';
+          } else {
+            showModal('NO PREMIADO', 'Lo sentimos, este código no tiene premio. Sigue intentándolo.');
+          }
+
+        } catch (error) {
+          console.error('Error:', error);
+          showModal('ERROR', 'Hubo un problema al verificar el código. Inténtalo de nuevo más tarde.');
+        }
+      });
+
+      function showModal(title, message) {
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        modal.classList.add('active');
+      }
+    });
+  </script>
+
+</html>
