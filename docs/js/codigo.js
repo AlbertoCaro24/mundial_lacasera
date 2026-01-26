@@ -2,7 +2,7 @@ document.getElementById("btnComprobar").addEventListener("click", () => {
   const codigo = document.getElementById("codigo").value;
   const mensaje = document.getElementById("mensaje");
 
-  fetch("http://localhost:3000/validar-codigo", {
+  fetch("https://lacasera-backend.onrender.com/validar-codigo", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
