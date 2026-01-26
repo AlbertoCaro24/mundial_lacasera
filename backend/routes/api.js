@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Code = require('../models/Code');
 const Winner = require('../models/Winner');
+const nodemailer = require('nodemailer');
+
+// Configurar el transporter para envío de emails
+const transporter = nodemailer.createTransporter({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 /**
  * 🕵️‍♀️ RUTA 1: VERIFICAR CÓDIGO
@@ -112,7 +122,23 @@ router.post('/register-winner', async (req, res) => {
 
         console.log(`🎉 ¡Nuevo ganador registrado! ${nombre} ganó ${codeDoc.prizeType}`);
 
-        // 4. Responder con éxito
+        // 4. Enviar email de confirmación
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Confirmación de Premio - La Casera Mundial 2026',
+            text: `Hola ${nombre},\n\n¡Enhorabuena! Tus datos se están procesando. El premio (${codeDoc.prizeType}) será entregado pronto en la dirección proporcionada: ${direccion}.\n\nGracias por participar en la promoción de La Casera para el Mundial 2026.\n\nAtentamente,\nEquipo de La Casera`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error enviando email:', error);
+            } else {
+                console.log('Email enviado:', info.response);
+            }
+        });
+
+        // 5. Responder con éxito
         return res.json({
             success: true,
             message: "¡Premio canjeado correctamente!",
