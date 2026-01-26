@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const WinnerSchema = new mongoose.Schema({
     // Datos personales del formulario
     nombre: { type: String, required: true },
+    apellidos: { type: String, required: true },
     email: { type: String, required: true },
     telefono: { type: String },
     direccion: { type: String }, // Para enviar el premio

@@ -63,7 +63,7 @@ router.post('/check-code', async (req, res) => {
  */
 router.post('/register-winner', async (req, res) => {
     try {
-        const { code, nombre, email, telefono, direccion } = req.body;
+        const { code, nombre, apellidos, email, telefono, direccion } = req.body;
         const cleanCode = code ? code.trim().toUpperCase() : '';
 
         // 1. Validación de seguridad CRÍTICA: "Atomicidad"
@@ -101,6 +101,7 @@ router.post('/register-winner', async (req, res) => {
         // 3. Guardar al Ganador
         const newWinner = new Winner({
             nombre,
+            apellidos,
             email,
             telefono,
             direccion,
@@ -110,7 +111,7 @@ router.post('/register-winner', async (req, res) => {
 
         await newWinner.save();
 
-        console.log(`🎉 ¡Nuevo ganador registrado! ${nombre} ganó ${codeDoc.prizeType}`);
+        console.log(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`);
 
         // 4. Responder con éxito
         return res.json({
@@ -142,7 +143,7 @@ router.get('/descargar-ganadores', async (req, res) => {
 
         // 3. Crear el CSV (manual para no instalar más librerías)
         // Cabeceras
-        let csv = "Nombre,Email,Telefono,Direccion,Premio,Codigo,Fecha\n";
+        let csv = "Nombre,Apellidos,Email,Telefono,Direccion,Premio,Codigo,Fecha\n";
 
         // Filas
         winners.forEach(w => {
@@ -151,7 +152,7 @@ router.get('/descargar-ganadores', async (req, res) => {
 
             const fecha = w.createdAt ? w.createdAt.toISOString().split('T')[0] : "";
 
-            csv += `${clean(w.nombre)},${clean(w.email)},${clean(w.telefono)},${clean(w.direccion)},${clean(w.prizeWon)},${clean(w.winningCode)},${fecha}\n`;
+            csv += `${clean(w.nombre)},${clean(w.apellidos)},${clean(w.email)},${clean(w.telefono)},${clean(w.direccion)},${clean(w.prizeWon)},${clean(w.winningCode)},${fecha}\n`;
         });
 
         // 4. Enviar el archivo
