@@ -3,6 +3,17 @@ const router = express.Router();
 const Code = require('../models/Code');
 const Winner = require('../models/Winner');
 const winston = require('winston');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
+
+// Configurar Nodemailer
+const emailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 /**
  * 🕵️‍♀️ RUTA 1: VERIFICAR CÓDIGO
@@ -112,6 +123,30 @@ router.post('/register-winner', async (req, res) => {
         });
 
         await newWinner.save();
+
+        // 3.5. Enviar email de confirmación al ganador
+        try {
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: '¡Enhorabuena! Tu premio de La Casera Mundial 2026',
+                html: `
+                    <h1>¡Felicidades, ${nombre} ${apellidos}!</h1>
+                    <p>Has ganado: <strong>${codeDoc.prizeType}</strong></p>
+                    <p>Tu código premiado fue: <strong>${cleanCode}</strong></p>
+                    <p>Recibirás tu premio en la dirección proporcionada en los próximos días.</p>
+                    <p>Gracias por participar en la promoción de La Casera Mundial 2026.</p>
+                    <br>
+                    <p>Atentamente,<br>Equipo de La Casera</p>
+                `
+            };
+
+            await emailTransporter.sendMail(mailOptions);
+            winston.info(`📧 Email de confirmación enviado a ${email}`);
+        } catch (emailError) {
+            winston.error('Error al enviar email de confirmación:', emailError);
+            // No fallar la respuesta por error de email
+        }
 
         winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
 

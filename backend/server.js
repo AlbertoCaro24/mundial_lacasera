@@ -4,9 +4,28 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const winston = require('winston');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
+
+// Configurar Nodemailer para envío de emails
+const emailTransporter = nodemailer.createTransport({
+    service: 'gmail', // O el servicio que uses (ej: 'outlook', 'yahoo')
+    auth: {
+        user: process.env.EMAIL_USER, // Tu email
+        pass: process.env.EMAIL_PASS  // Contraseña o app password
+    }
+});
+
+// Verificar conexión de email al iniciar
+emailTransporter.verify((error, success) => {
+    if (error) {
+        logger.error('Error en configuración de email:', error);
+    } else {
+        logger.info('Servidor de email listo para enviar mensajes');
+    }
+});
 
 // Configurar Winston para logging avanzado
 const logger = winston.createLogger({
@@ -73,4 +92,4 @@ app.listen(PORT, () => {
     logger.info(`Servidor escuchando en el puerto ${PORT}`);
 });
 
-module.exports = app;
+module.exports = { app, emailTransporter };
