@@ -7,12 +7,19 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // Configurar Nodemailer
+// Configurar Nodemailer con ajustes explícitos para evitar Timeouts en Render
 const emailTransporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true para 465, false para otros puertos
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    // Añadimos timeout para que no se quede colgado indefinidamente
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 });
 
 /**
