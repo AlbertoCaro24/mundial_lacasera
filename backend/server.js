@@ -37,9 +37,10 @@ const logger = winston.createLogger({
         winston.format.json()
     ),
     transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/combined.log' })
+        new winston.transports.Console()
+        // Eliminamos los transportes de archivo para evitar errores en Render si la carpeta 'logs' no existe
+        // new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        // new winston.transports.File({ filename: 'logs/combined.log' })
     ]
 });
 
