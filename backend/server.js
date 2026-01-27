@@ -18,7 +18,8 @@ const emailTransporter = nodemailer.createTransport({
     }
 });
 
-// Verificar conexión de email al iniciar
+// Verificar conexión de email al iniciar (DESACTIVADO PARA EVITAR ERRORES DE TIMEOUT EN RENDER)
+/*
 emailTransporter.verify((error, success) => {
     if (error) {
         logger.error('Error en configuración de email:', error);
@@ -26,6 +27,7 @@ emailTransporter.verify((error, success) => {
         logger.info('Servidor de email listo para enviar mensajes');
     }
 });
+*/
 
 // Configurar Winston para logging avanzado
 const logger = winston.createLogger({
