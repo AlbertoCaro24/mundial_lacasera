@@ -131,7 +131,8 @@ router.post('/register-winner', async (req, res) => {
 
         await newWinner.save();
 
-        // 3.5. Enviar email de confirmación al ganador
+        // 3.5. Enviar email de confirmación al ganador (DESACTIVADO POR ERROR ETIMEDOUT)
+        /*
         try {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
@@ -154,6 +155,7 @@ router.post('/register-winner', async (req, res) => {
             winston.error('Error al enviar email de confirmación:', emailError);
             // No fallar la respuesta por error de email
         }
+        */
 
         winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
 
