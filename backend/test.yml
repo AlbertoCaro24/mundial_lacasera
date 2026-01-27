@@ -1,0 +1,12 @@
+config:
+  target: 'https://lacasera-backend.onrender.com'  # O tu URL de producción
+  phases:
+    - duration: 60
+      arrivalRate: 10  # 10 requests/seg
+scenarios:
+  - name: 'Check code'
+    flow:
+      - post:
+          url: '/api/check-code'
+          json:
+            code: 'TEST1234'  # Un código existente

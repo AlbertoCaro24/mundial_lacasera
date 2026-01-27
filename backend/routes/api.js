@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Code = require('../models/Code');
 const Winner = require('../models/Winner');
+const winston = require('winston');
 
 /**
  * 🕵️‍♀️ RUTA 1: VERIFICAR CÓDIGO
@@ -43,6 +44,7 @@ router.post('/check-code', async (req, res) => {
 
         // CASO C: Código válido y sin usar
         // Devolvemos si tiene premio o no
+        winston.info('Código validado', { code: cleanCode, isPrize: foundCode.isPrize, prizeType: foundCode.prizeType, ip: req.ip });
         return res.json({
             success: true,
             isPrize: foundCode.isPrize,
@@ -50,7 +52,7 @@ router.post('/check-code', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error al verificar código:", error);
+        winston.error("Error al verificar código:", { error: error.message, code: req.body.code, ip: req.ip });
         res.status(500).json({ success: false, message: "Error interno del servidor" });
     }
 });
@@ -111,7 +113,7 @@ router.post('/register-winner', async (req, res) => {
 
         await newWinner.save();
 
-        console.log(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`);
+        winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
 
         // 4. Responder con éxito
         return res.json({
@@ -121,7 +123,7 @@ router.post('/register-winner', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error al registrar ganador:", error);
+        winston.error("Error al registrar ganador:", { error: error.message, code: cleanCode, ip: req.ip });
         // Si falló guardar el ganador pero el código se marcó usado, habría que    // Si falló guardar el ganador...
         res.status(500).json({ success: false, message: "Error al procesar el premio." });
     }
@@ -161,7 +163,7 @@ router.get('/descargar-ganadores', async (req, res) => {
         res.send(csv);
 
     } catch (error) {
-        console.error("Error al generar CSV:", error);
+        winston.error("Error al generar CSV:", { error: error.message, ip: req.ip });
         res.status(500).send("Error generando el archivo");
     }
 });
