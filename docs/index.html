@@ -4,49 +4,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Casera · Mundial 2026</title>
+  <meta name="description" content="Comprueba tu código promocional de La Casera para el Mundial 2026 y gana premios de la Selección Española.">
+  <meta name="theme-color" content="#D2001E">
+  <title>La Casera · Mundial 2026 - Comprueba tu código</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap"
-    rel="stylesheet">
 </head>
 
 <body>
+  <!-- Main Content -->
+  <main class="container" role="main">
+    <header>
+      <h1>Comprueba tu código promocional</h1>
+      <p style="color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">¿Tienes un código de La Casera? ¡Compruébalo y gana increíbles premios de La Roja!</p>
+    </header>
 
-  <main class="container">
-    <h1>COMPRUEBA TU CÓDIGO PROMOCIONAL</h1>
-
-    <form action="#" method="POST" class="promo-form">
+    <!-- Promotional Form -->
+    <form action="#" method="POST" class="promo-form" novalidate>
       <div class="input-group">
-        <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required>
+        <label for="codigo" class="visually-hidden">Código promocional</label>
+        <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required autocomplete="off" aria-required="true" aria-describedby="codigoHelp">
+        <div id="codigoHelp" class="visually-hidden">Introduce el código que aparece en tu envase de La Casera.</div>
       </div>
 
-      <div class="checkbox-group">
+      <!-- Terms & Conditions -->
+      <fieldset class="checkbox-group">
+        <legend style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;">Aceptaciones requeridas</legend>
         <label class="checkbox-container">
-          <input type="checkbox" name="mayor_edad" required>
+          <input type="checkbox" name="mayor_edad" required aria-label="Confirmo que soy mayor de 16 años">
           <span class="checkmark"></span>
           Soy mayor de 16 años
         </label>
 
         <label class="checkbox-container">
-          <input type="checkbox" name="bases_legales" required>
+          <input type="checkbox" name="bases_legales" required aria-label="He leído y acepto las bases legales">
           <span class="checkmark"></span>
-          He leído y acepto las&nbsp;<a href="bases-legales.html" target="_blank">bases legales</a>.
+          He leído y acepto las&nbsp;<a href="bases-legales.html" target="_blank" rel="noopener noreferrer">bases legales</a>.
         </label>
-      </div>
+      </fieldset>
 
-      <button type="submit" class="submit-btn" id="submitBtn">ENVIAR &rarr;</button>
+      <button type="submit" class="submit-btn" id="submitBtn">Enviar →</button>
     </form>
   </main>
 
   <!-- Result Modal -->
-  <div class="modal-overlay" id="resultModal">
+  <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-content">
-      <h2 id="modalTitle">RESULTADO</h2>
+      <h2 id="modalTitle">Resultado</h2>
       <p id="modalMessage">Mensaje del resultado</p>
-      <button class="close-modal" id="closeModal">CERRAR</button>
+      <button class="close-modal" id="closeModal" aria-label="Cerrar modal">Cerrar</button>
     </div>
   </div>
 
@@ -58,12 +63,21 @@
       const modalMessage = document.getElementById('modalMessage');
       const closeModal = document.getElementById('closeModal');
 
-      // Close modal and reset input
+      // Close modal and reset input (with focus return)
+      let _previousFocus = null;
+      let _onKeyDown = null;
+
       function closeAndReset() {
         modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        if (_onKeyDown) document.removeEventListener('keydown', _onKeyDown);
         const codigoInput = document.getElementById('codigo');
         codigoInput.value = '';
-        codigoInput.focus();
+        if (_previousFocus && typeof _previousFocus.focus === 'function') {
+          _previousFocus.focus();
+        } else {
+          codigoInput.focus();
+        }
       }
 
       // Close modal event
@@ -126,7 +140,44 @@
       function showModal(title, message) {
         modalTitle.textContent = title;
         modalMessage.textContent = message;
+        // Accessibility: save focus, show modal, set aria-hidden, trap focus, handle Escape
+        _previousFocus = document.activeElement;
+        modal.setAttribute('aria-hidden', 'false');
         modal.classList.add('active');
+
+        // Find focusable elements inside modal
+        const focusable = modal.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
+        const focusableArr = Array.prototype.slice.call(focusable);
+        const firstFocusable = focusableArr[0];
+        const lastFocusable = focusableArr[focusableArr.length - 1];
+
+        // Focus the close button for immediate keyboard access
+        if (closeModal) closeModal.focus();
+
+        _onKeyDown = function(e) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeAndReset();
+            return;
+          }
+
+          if (e.key === 'Tab' && focusableArr.length > 0) {
+            // Trap focus within modal
+            if (e.shiftKey) { // shift + tab
+              if (document.activeElement === firstFocusable) {
+                e.preventDefault();
+                lastFocusable.focus();
+              }
+            } else { // tab
+              if (document.activeElement === lastFocusable) {
+                e.preventDefault();
+                firstFocusable.focus();
+              }
+            }
+          }
+        };
+
+        document.addEventListener('keydown', _onKeyDown);
       }
     });
   </script>

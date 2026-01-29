@@ -1,232 +1,465 @@
-:root {
-    --primary-red: #D2001E;
-    /* Approximate red from the image/brand */
-    --text-color: #333;
-    --gray-light: #ddd;
+/**
+ * La Casera · Mundial 2026
+ * Campaña Oficial - La Roja
+ * 
+ * Tipografía: JHCAudemars
+ * Recursos: /estilos/fotos/ + /estilos/tipografias/
+ */
+
+/* ========================================
+   FONT FACE - JHCAudemars
+   ======================================== */
+
+@font-face {
+    font-family: 'JHCAudemars';
+    src: url('../estilos/_Tipos/JHCAudemars-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
 }
 
+@font-face {
+    font-family: 'JHCAudemars';
+    src: url('../estilos/_Tipos/JHCAudemars-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========================================
+   CSS CUSTOM PROPERTIES
+   ======================================== */
+
+:root {
+    /* Colores de marca La Casera */
+    --primary-red: #D2001E;
+    --primary-dark: #8B0000;
+    --primary-light: #FF3333;
+    
+    /* Colores España/Fútbol */
+    --spanish-navy: #0A2463;
+    --spanish-gold: #FFB81C;
+    --grass-green: #1B5E20;
+    
+    /* Neutral palette */
+    --white: #FFFFFF;
+    --black: #000000;
+    --gray-light: #F5F5F5;
+    --gray-medium: #E0E0E0;
+    --gray-dark: #333333;
+    
+    /* Spacing scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    
+    /* Typography */
+    --font-primary: 'JHCAudemars', sans-serif;
+    --font-fallback: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-out;
+    --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms ease-out;
+}
+
+/* ========================================
+   RESET & BASE STYLES
+   ======================================== */
+
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JHCAudemars', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Imagen de fondo a nivel de página (mejor rendimiento y cobertura) */
+    background: var(--white) url('../estilos/OP%201_.jpg') center/cover no-repeat;
+    background-attachment: fixed;
+    color: var(--gray-dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #fff;
-    color: var(--text-color);
+    padding: var(--space-md);
 }
+
+/* ========================================
+   CONTAINER & LAYOUT
+   ======================================== */
 
 .container {
     width: 100%;
-    max-width: 600px;
-    padding: 2rem;
-    text-align: center;
+    max-width: 700px;
+    /* Fondo del contenedor ligeramente translucido para que se vea la imagen de fondo */
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(4px);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: slideInUp 0.6s ease-out;
+    position: relative;
 }
 
+/* Overlay blanco semi-transparente para legibilidad */
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Superposición sutil para legibilidad; baja opacidad para que se aprecie el fondo */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.7));
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Hero Section - Imagen de fondo removida */
+
+/* Content wrapper */
+.container > * {
+    padding: var(--space-lg);
+    position: relative;
+    z-index: 2; /* asegurar que el contenido quede por encima de la superposición */
+}
+
+.container > h1 {
+    padding: var(--space-xl) var(--space-lg) var(--space-md);
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
 h1 {
-    font-family: 'Oswald', sans-serif;
-    /* Condensed font style */
+    font-family: 'JHCAudemars', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 900;
     color: var(--primary-red);
     text-transform: uppercase;
-    font-size: 2.5rem;
-    /* Adjustable */
-    margin-bottom: 3rem;
-    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: var(--space-lg);
+    animation: fadeInDown 0.6s ease-out 0.1s backwards;
 }
+
+h2 {
+    font-family: 'JHCAudemars', sans-serif;
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--primary-red);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-md);
+}
+
+p {
+    font-size: 0.95rem;
+    color: var(--gray-dark);
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+}
+
+/* ========================================
+   FORM STYLES
+   ======================================== */
 
 .promo-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
+    gap: var(--space-lg);
+    animation: fadeInUp 0.6s ease-out 0.2s backwards;
 }
 
-/* Input Styles */
+/* Input Group */
 .input-group {
     position: relative;
     width: 100%;
-    max-width: 400px;
-    margin-bottom: 2rem;
-    text-align: left;
+    margin-bottom: var(--space-md);
 }
 
 .input-group input {
     width: 100%;
-    border: none;
-    border-bottom: 1px solid var(--gray-light);
-    padding: 0.5rem 0;
-    font-size: 1.2rem;
+    padding: var(--space-md) var(--space-lg);
+    font-size: 1rem;
+    border: 2px solid var(--gray-medium);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--gray-dark);
+    font-family: inherit;
+    transition: all var(--transition-smooth);
     outline: none;
-    transition: border-color 0.3s;
-    color: var(--text-color);
 }
 
 .input-group input::placeholder {
     color: var(--primary-red);
+    font-weight: 600;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    opacity: 0.8;
     font-size: 0.9rem;
-    /* Match previous label size */
-    opacity: 1;
-    /* Firefox */
 }
 
 .input-group input:focus {
-    border-bottom-color: var(--primary-red);
+    border-color: var(--primary-red);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(210, 0, 30, 0.15);
 }
 
-/* Checkbox Styles */
+.input-group input:hover {
+    border-color: var(--primary-red);
+}
+
+.input-group input:valid {
+    border-color: #4CAF50;
+}
+
+/* ========================================
+   CHECKBOX STYLES
+   ======================================== */
+
 .checkbox-group {
-    text-align: left;
-    margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+    padding: var(--space-lg);
+    background: #FFFFFF;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-red);
+    animation: fadeInUp 0.6s ease-out 0.3s backwards;
 }
 
 .checkbox-container {
     display: flex;
     align-items: center;
-    position: relative;
-    padding-left: 30px;
     cursor: pointer;
-    font-size: 0.95rem;
-    color: #666;
+    position: relative;
+    padding-left: 40px;
     user-select: none;
+    transition: color var(--transition-fast);
+    font-size: 0.95rem;
+    color: var(--gray-dark);
 }
 
-.checkbox-container input {
+.checkbox-container:hover {
+    color: var(--primary-red);
+}
+
+.checkbox-container input[type="checkbox"] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
-    height: 0;
     width: 0;
+    height: 0;
 }
 
 .checkmark {
     position: absolute;
-    top: 0;
+    top: 2px;
     left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    /* Optional rounded */
+    width: 24px;
+    height: 24px;
+    background-color: var(--white);
+    border: 2px solid var(--gray-medium);
+    border-radius: 6px;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.checkbox-container input:checked~.checkmark {
-    background-color: var(--primary-red);
+.checkbox-container:hover .checkmark {
     border-color: var(--primary-red);
+    background-color: rgba(210, 0, 30, 0.05);
 }
 
-.checkmark:after {
-    content: "";
+.checkbox-container input[type="checkbox"]:checked ~ .checkmark {
+    background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
+    border-color: var(--primary-red);
+    box-shadow: 0 4px 12px rgba(210, 0, 30, 0.3);
+}
+
+.checkbox-container input[type="checkbox"]:focus ~ .checkmark {
+    box-shadow: 0 0 0 3px rgba(210, 0, 30, 0.2);
+}
+
+.checkmark::after {
+    content: '';
     position: absolute;
     display: none;
-}
-
-.checkbox-container input:checked~.checkmark:after {
-    display: block;
-}
-
-.checkbox-container .checkmark:after {
-    left: 6px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
+    animation: checkmark-pop 0.3s ease-out;
+}
+
+.checkbox-container input[type="checkbox"]:checked ~ .checkmark::after {
+    display: block;
+}
+
+@keyframes checkmark-pop {
+    0% {
+        transform: rotate(0deg) scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(45deg) scale(1);
+        opacity: 1;
+    }
 }
 
 .checkbox-container a {
     color: var(--primary-red);
-    /* "bases legales" in red */
     text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    display: inline;
+    transition: color var(--transition-fast);
+}
+
+.checkbox-container a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-red);
+    transition: width var(--transition-fast);
 }
 
 .checkbox-container a:hover {
-    text-decoration: underline;
+    color: var(--primary-dark);
 }
 
-/* Button Styles */
+.checkbox-container a:hover::after {
+    width: 100%;
+}
+
+/* ========================================
+   BUTTON STYLES
+   ======================================== */
+
+/* Mobile: evitar background-attachment fixed por rendimiento */
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        background-position: center top;
+    }
+
+    .container {
+        margin: 0 0.5rem;
+        max-width: 100%;
+        border-radius: 10px;
+    }
+}
+
 .submit-btn {
-    background-color: var(--primary-red);
-    color: white;
-    border: none;
-    padding: 10px 40px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 5px;
+    padding: var(--space-md) var(--space-xl);
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    font-weight: 700;
+    font-family: 'JHCAudemars', sans-serif;
     text-transform: uppercase;
-    transition: background-color 0.3s;
+    letter-spacing: 1px;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-dark) 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(210, 0, 30, 0.3);
+    min-width: 200px;
+    animation: fadeInUp 0.6s ease-out 0.4s backwards;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left var(--transition-smooth);
 }
 
 .submit-btn:hover {
-    background-color: #b00018;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(210, 0, 30, 0.4);
 }
 
-/* Legal Page specific styles */
-.legal-page {
-    align-items: flex-start;
-    /* Allow scrolling for long content */
-    padding-top: 2rem;
+.submit-btn:hover::before {
+    left: 100%;
 }
 
-.legal-container {
-    text-align: left;
-    background-color: #fff;
-    max-width: 800px;
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(210, 0, 30, 0.3);
 }
 
-.legal-text h2 {
-    color: var(--primary-red);
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
+.submit-btn:focus {
+    outline: none;
+    box-shadow: 0 6px 20px rgba(210, 0, 30, 0.3), 0 0 0 4px rgba(210, 0, 30, 0.15);
 }
 
-.legal-text p {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    color: #555;
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.back-link {
-    display: inline-block;
-    color: var(--primary-red);
-    text-decoration: none;
-    font-weight: bold;
-    margin-top: 2rem;
+/* Utility: visually hidden (accessibility) */
+.visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+    border: 0; padding: 0; margin: -1px;
 }
 
-.back-link:hover {
-    text-decoration: underline;
-}
+/* ========================================
+   MODAL STYLES
+   ======================================== */
 
-/* Result Modal Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.3s, visibility 0.3s;
+    transition: opacity var(--transition-smooth), visibility var(--transition-smooth);
+    padding: var(--space-md);
 }
 
 .modal-overlay.active {
@@ -235,41 +468,451 @@ h1 {
 }
 
 .modal-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
+    background: var(--white);
+    border-radius: 12px;
+    max-width: 500px;
+    width: 100%;
+    padding: var(--space-2xl) var(--space-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
     text-align: center;
-    max-width: 400px;
-    width: 90%;
     position: relative;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: modal-pop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-top: 4px solid var(--primary-red);
+}
+
+@keyframes modal-pop {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .modal-content h2 {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'JHCAudemars', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
     color: var(--primary-red);
-    margin-bottom: 1rem;
-    font-size: 2rem;
+    margin-bottom: var(--space-lg);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
 }
 
 .modal-content p {
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-    color: #333;
+    font-size: 0.95rem;
+    color: var(--gray-dark);
+    margin-bottom: var(--space-lg);
+    line-height: 1.8;
 }
 
 .close-modal {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'JHCAudemars', sans-serif;
     text-transform: uppercase;
-    transition: background-color 0.3s;
+    color: var(--white);
+    background: var(--primary-red);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    letter-spacing: 0.5px;
 }
 
 .close-modal:hover {
-    background-color: #555;
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(210, 0, 30, 0.3);
 }
+
+.close-modal:active {
+    transform: translateY(0);
+}
+
+.close-modal:focus {
+    outline: none;
+    box-shadow: 0 4px 12px rgba(210, 0, 30, 0.3), 0 0 0 3px rgba(210, 0, 30, 0.15);
+}
+
+/* ========================================
+   LEGAL PAGE STYLES
+   ======================================== */
+
+.legal-page {
+    align-items: flex-start;
+    padding-top: var(--space-2xl);
+}
+
+.legal-container {
+    max-width: 900px;
+    width: 100%;
+}
+
+.legal-text {
+    padding: var(--space-2xl);
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.legal-text h2 {
+    color: var(--primary-red);
+    font-size: 1.3rem;
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 2px solid var(--gray-medium);
+    transition: border-color var(--transition-fast);
+}
+
+.legal-text h2:first-child {
+    margin-top: 0;
+}
+
+.legal-text p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--gray-dark);
+    margin-bottom: var(--space-md);
+}
+
+.legal-text p strong {
+    color: var(--primary-red);
+    font-weight: 700;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-2xl);
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.back-link::before {
+    content: '←';
+    font-size: 1.2rem;
+    transition: transform var(--transition-fast);
+}
+
+.back-link:hover {
+    color: var(--primary-dark);
+    transform: translateX(-3px);
+}
+
+.back-link:hover::before {
+    transform: translateX(-4px);
+}
+
+/* ========================================
+   THANK YOU PAGE
+   ======================================== */
+
+.thank-you-container {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-lg);
+    background: #FFFFFF;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    animation: slideInUp 0.6s ease-out;
+    border-left: 5px solid var(--primary-red);
+    border-top: 5px solid var(--spanish-gold);
+}
+
+.check-icon {
+    font-size: clamp(3rem, 10vw, 5rem);
+    color: var(--primary-red);
+    margin-bottom: var(--space-lg);
+    display: block;
+    animation: checkmark-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes checkmark-bounce {
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+.thank-you-container h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    margin-bottom: var(--space-md);
+    color: var(--primary-red);
+}
+
+.thank-you-container h2 {
+    color: var(--primary-red);
+    margin-bottom: var(--space-lg);
+    font-size: 1.5rem;
+}
+
+.thank-you-msg {
+    font-size: 1rem;
+    color: var(--gray-dark);
+    line-height: 1.8;
+    margin-bottom: var(--space-lg);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - TABLET
+   ======================================== */
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--space-sm);
+    }
+
+    .container {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    .container > * {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    h1 {
+        font-size: clamp(1.5rem, 4vw, 2.2rem);
+        margin-bottom: var(--space-md);
+    }
+
+    h2 {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+    }
+
+    .checkbox-group {
+        padding: var(--space-md);
+    }
+
+    .modal-content {
+        padding: var(--space-lg);
+        max-width: 90%;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+        min-width: unset;
+        padding: var(--space-md) var(--space-lg);
+    }
+
+    .thank-you-container {
+        padding: var(--space-2xl) var(--space-md);
+    }
+
+    .legal-text {
+        padding: var(--space-lg);
+    }
+
+    .legal-text h2 {
+        margin-top: var(--space-lg);
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE
+   ======================================== */
+
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+
+    body {
+        padding: var(--space-xs);
+    }
+
+    .container {
+        border-radius: 6px;
+    }
+
+    .container::before {
+        height: 120px;
+    }
+
+    .container > * {
+        padding: var(--space-md);
+    }
+
+    .container > h1 {
+        padding: var(--space-lg) var(--space-md) var(--space-sm);
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-md);
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    .input-group input {
+        padding: var(--space-md) var(--space-sm);
+        font-size: 16px;
+    }
+
+    .input-group input::placeholder {
+        font-size: 0.8rem;
+    }
+
+    .checkbox-group {
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+
+    .checkbox-container {
+        padding-left: 32px;
+        font-size: 0.9rem;
+    }
+
+    .checkmark {
+        width: 20px;
+        height: 20px;
+    }
+
+    .modal-overlay {
+        padding: var(--space-sm);
+    }
+
+    .modal-content {
+        padding: var(--space-lg) var(--space-md);
+        border-radius: 8px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: var(--space-md);
+    }
+
+    .modal-content p {
+        font-size: 0.9rem;
+    }
+
+    .close-modal {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.85rem;
+    }
+
+    .submit-btn {
+        font-size: 0.95rem;
+        padding: var(--space-md) var(--space-lg);
+        letter-spacing: 0.3px;
+    }
+
+    .thank-you-container {
+        padding: var(--space-2xl) var(--space-md);
+    }
+
+    .check-icon {
+        font-size: 3rem;
+        margin-bottom: var(--space-md);
+    }
+
+    .thank-you-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .thank-you-container h2 {
+        font-size: 1.2rem;
+    }
+
+    .thank-you-msg {
+        font-size: 0.9rem;
+    }
+
+    .legal-text {
+        padding: var(--space-md);
+    }
+
+    .legal-text h2 {
+        font-size: 1.1rem;
+    }
+
+    .legal-text p {
+        font-size: 0.9rem;
+    }
+
+    .back-link {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY & UTILITIES
+   ======================================== */
+
+/* Focus visible para navegación por teclado */
+*:focus-visible {
+    outline: 2px solid var(--primary-red);
+    outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+

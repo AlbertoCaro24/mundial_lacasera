@@ -4,51 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="¡Enhorabuena! Reclama tu premio de La Casera en la campaña del Mundial 2026.">
+    <meta name="theme-color" content="#D2001E">
     <title>Reclama tu Premio · La Casera</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
+    <main class="container" role="main">
+        <header>
+            <h1>¡Enhorabuena! Reclama tu premio</h1>
+            <p style="margin-bottom: 2rem; color: #555; font-size: 0.95rem;">Rellena tus datos para recibir tu pack de La Roja.</p>
+        </header>
 
-    <main class="container">
-        <h1>¡ENHORABUENA! RECLAMA TU PREMIO</h1>
-        <p style="margin-bottom: 2rem; color: #555;">Rellena tus datos para recibir tu pack de La Roja.</p>
-
-        <form action="#" method="POST" class="promo-form">
+        <form action="#" method="POST" class="promo-form" novalidate>
             <div class="input-group">
-                <input type="text" id="nombre" name="nombre" placeholder="NOMBRE *" required>
+                <input type="text" id="nombre" name="nombre" placeholder="NOMBRE *" required autocomplete="given-name">
             </div>
 
             <div class="input-group">
-                <input type="text" id="apellidos" name="apellidos" placeholder="APELLIDOS *" required>
+                <input type="text" id="apellidos" name="apellidos" placeholder="APELLIDOS *" required autocomplete="family-name">
             </div>
 
             <div class="input-group">
-                <input type="email" id="email" name="email" placeholder="EMAIL *" required>
+                <input type="email" id="email" name="email" placeholder="EMAIL *" required autocomplete="email">
             </div>
 
             <div class="input-group">
-                <input type="tel" id="telefono" name="telefono" placeholder="TELÉFONO *" required>
+                <input type="tel" id="telefono" name="telefono" placeholder="TELÉFONO *" required autocomplete="tel">
             </div>
 
             <div class="input-group">
-                <input type="text" id="direccion" name="direccion" placeholder="DIRECCIÓN COMPLETA *" required>
+                <input type="text" id="direccion" name="direccion" placeholder="DIRECCIÓN COMPLETA *" required autocomplete="street-address">
             </div>
 
             <div class="input-group">
-                <input type="text" id="cp" name="cp" placeholder="CÓDIGO POSTAL *" required>
+                <input type="text" id="cp" name="cp" placeholder="CÓDIGO POSTAL *" required autocomplete="postal-code">
             </div>
 
             <div class="input-group">
-                <input type="text" id="ciudad" name="ciudad" placeholder="CIUDAD *" required>
+                <input type="text" id="ciudad" name="ciudad" placeholder="CIUDAD *" required autocomplete="address-level2">
             </div>
 
-            <button type="submit" class="submit-btn">SOLICITAR PREMIO &rarr;</button>
+            <div style="display:flex; justify-content:center; margin-top:1rem;">
+                <button type="submit" class="submit-btn" id="submitBtn">Solicitar premio</button>
+            </div>
+
         </form>
     </main>
 
