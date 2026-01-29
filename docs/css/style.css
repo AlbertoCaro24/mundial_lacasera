@@ -364,7 +364,8 @@ p {
 @media (max-width: 768px) {
     body {
         background-attachment: scroll;
-        background-position: center top;
+        /* Alinear el fondo a la izquierda en móvil para mostrar las botellas de La Casera */
+        background-position: left 30%;
     }
 
     .container {
