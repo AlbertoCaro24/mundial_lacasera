@@ -49,7 +49,7 @@ router.post('/check-code', async (req, res) => {
         }
 
         // CASO B: El código ya se usó (¡Alerta de pillo!)
-        if (foundCode.used) {
+        if (foundCode.used || foundCode.isUsed) {
             return res.json({
                 success: false,
                 message: "Este código ya ha sido canjeado."
@@ -106,7 +106,10 @@ router.post('/register-winner', async (req, res) => {
         const winnerId = new mongoose.Types.ObjectId();
 
         const codeDoc = await Code.findOneAndUpdate(
-            { code: cleanCode, used: false }, // Filtro: debe existir y NO estar usado
+            {
+                code: cleanCode,
+                $or: [{ used: false }, { used: { $exists: false } }]
+            }, // Filtro: debe existir y NO estar usado (admite campo used faltante)
             {
                 $set: {
                     used: true,

@@ -64,6 +64,11 @@
         document.querySelector('.promo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            // Evitar doble envío
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
 
@@ -94,10 +99,15 @@
                     window.location.href = 'gracias.html';
                 } else {
                     alert('Error: ' + result.message);
+                    // Reactivar botón si hay error de negocio (aunque si el código se quemó, no servirá de mucho reintentar, pero por UX)
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Solicitar premio';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Hubo un problema al conectar con el servidor.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Solicitar premio';
             }
         });
     </script>
