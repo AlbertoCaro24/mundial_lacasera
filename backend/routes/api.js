@@ -54,8 +54,26 @@ router.post('/check-code', async (req, res) => {
         }
 
         // CASO C: Código válido y sin usar
+
+        // --- LOGIC FIX: Quemar códigos NO premiados ---
+        if (!foundCode.isPrize) {
+            // Si NO tiene premio, lo quemamos ya.
+            // Así evitamos que se pueda reintentar o pasar a otro.
+            await Code.findByIdAndUpdate(foundCode._id, {
+                $set: {
+                    used: true,
+                    usedAt: new Date(),
+                    ip: req.ip,
+                    result: 'LOSE',
+                    userAgent: req.get('User-Agent') || ''
+                }
+            });
+            winston.info('Código NO premiado validado y marcado como usado.', { code: cleanCode, ip: req.ip });
+        } else {
+            winston.info('Código PREMIADO validado.', { code: cleanCode, prizeType: foundCode.prizeType, ip: req.ip });
+        }
+
         // Devolvemos si tiene premio o no
-        winston.info('Código validado', { code: cleanCode, isPrize: foundCode.isPrize, prizeType: foundCode.prizeType, ip: req.ip });
         return res.json({
             success: true,
             isPrize: foundCode.isPrize,
