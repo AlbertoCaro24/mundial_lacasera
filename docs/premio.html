@@ -77,7 +77,7 @@
             data.code = winningCode; // Añadimos el código a los datos a enviar
 
             try {
-                const API_BASE = window.__API_BASE__ || '';
+                const API_BASE = 'https://lacasera-backend.onrender.com';
                 const response = await fetch(`${API_BASE}/api/register-winner`, {
                     method: 'POST',
                     headers: {
