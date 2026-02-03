@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: lacaseramundial-backend
+    env: node
+    plan: free
+    repo: <repo-url>
+    branch: main
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+    disk: 512
+    region: oregon

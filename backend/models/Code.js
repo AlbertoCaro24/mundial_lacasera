@@ -24,18 +24,25 @@ const CodeSchema = new mongoose.Schema({
         default: null
     },
 
-    // 4. ¿Ya ha sido usado?
-    // Esto es CRÍTICO para evitar que alguien use el mismo código dos veces.
-    isUsed: {
+    // 4. Estado de uso (nuevo esquema)
+    // Usamos campos más detallados para auditoría y seguimiento
+    used: {
         type: Boolean,
-        default: false
+        default: false,
+        index: true
     },
 
-    // 5. ¿Quién lo usó y cuándo? (Relleno solo cuando se usa)
-    usedBy: {
-        ip: { type: String }, // Guardamos la IP por seguridad (auditoría)
-        date: { type: Date }  // Fecha y hora exacta del canje
-    }
+    usedAt: { type: Date, default: null },
+
+    // Si existe un ganador asociado, referenciamos su _id (puede crearse antes de guardar el ganador)
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Winner', default: null },
+
+    // Datos de auditoría
+    ip: { type: String, default: null },
+    userAgent: { type: String, default: null },
+
+    // Resultado del canje: 'WIN' | 'LOSE' | 'PENDING'
+    result: { type: String, enum: ['WIN','LOSE','PENDING'], default: null }
 });
 
 module.exports = mongoose.model('Code', CodeSchema);

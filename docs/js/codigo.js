@@ -2,12 +2,13 @@ document.getElementById("btnComprobar").addEventListener("click", () => {
   const codigo = document.getElementById("codigo").value;
   const mensaje = document.getElementById("mensaje");
 
-  fetch("https://lacasera-backend.onrender.com/validar-codigo", {
+  const API_BASE = window.__API_BASE__ || '';
+  fetch(`${API_BASE}/api/check-code`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ codigo })
+    body: JSON.stringify({ code: codigo })
   })
   .then(res => res.json())
   .then(data => {

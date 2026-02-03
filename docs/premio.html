@@ -11,10 +11,14 @@
 </head>
 
 <body>
+    <!-- Hero Image -->
+    <div class="hero-container">
+        <img src="estilos/FONDO NUEVO ROJA.png" alt="La Casera Mundial 2026" class="hero-image">
+    </div>
+
     <main class="container" role="main">
         <header>
             <h1>¡Enhorabuena! Reclama tu premio</h1>
-            <p style="margin-bottom: 2rem; color: #555; font-size: 0.95rem;">Rellena tus datos para recibir tu pack de La Roja.</p>
         </header>
 
         <form action="#" method="POST" class="promo-form" novalidate>
@@ -23,7 +27,8 @@
             </div>
 
             <div class="input-group">
-                <input type="text" id="apellidos" name="apellidos" placeholder="APELLIDOS *" required autocomplete="family-name">
+                <input type="text" id="apellidos" name="apellidos" placeholder="APELLIDOS *" required
+                    autocomplete="family-name">
             </div>
 
             <div class="input-group">
@@ -35,7 +40,8 @@
             </div>
 
             <div class="input-group">
-                <input type="text" id="direccion" name="direccion" placeholder="DIRECCIÓN COMPLETA *" required autocomplete="street-address">
+                <input type="text" id="direccion" name="direccion" placeholder="DIRECCIÓN COMPLETA *" required
+                    autocomplete="street-address">
             </div>
 
             <div class="input-group">
@@ -43,7 +49,8 @@
             </div>
 
             <div class="input-group">
-                <input type="text" id="ciudad" name="ciudad" placeholder="CIUDAD *" required autocomplete="address-level2">
+                <input type="text" id="ciudad" name="ciudad" placeholder="CIUDAD *" required
+                    autocomplete="address-level2">
             </div>
 
             <div style="display:flex; justify-content:center; margin-top:1rem;">
@@ -70,7 +77,8 @@
             data.code = winningCode; // Añadimos el código a los datos a enviar
 
             try {
-                const response = await fetch('https://lacasera-backend.onrender.com/api/register-winner', {
+                const API_BASE = window.__API_BASE__ || '';
+                const response = await fetch(`${API_BASE}/api/register-winner`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -18,8 +18,7 @@ const emailTransporter = nodemailer.createTransport({
     }
 });
 
-// Verificar conexión de email al iniciar (DESACTIVADO PARA EVITAR ERRORES DE TIMEOUT EN RENDER)
-/*
+// Verificar conexión de email al iniciar
 emailTransporter.verify((error, success) => {
     if (error) {
         logger.error('Error en configuración de email:', error);
@@ -27,7 +26,6 @@ emailTransporter.verify((error, success) => {
         logger.info('Servidor de email listo para enviar mensajes');
     }
 });
-*/
 
 // Configurar Winston para logging avanzado
 const logger = winston.createLogger({
@@ -37,10 +35,9 @@ const logger = winston.createLogger({
         winston.format.json()
     ),
     transports: [
-        new winston.transports.Console()
-        // Eliminamos los transportes de archivo para evitar errores en Render si la carpeta 'logs' no existe
-        // new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        // new winston.transports.File({ filename: 'logs/combined.log' })
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/combined.log' })
     ]
 });
 
@@ -50,7 +47,10 @@ const logger = winston.createLogger({
 app.use(helmet());
 
 // CORS: Permite que tu frontend (web) hable con este backend
-app.use(cors());
+// Usa FRONTEND_URL en el .env para restringir el origen (ej: https://tusitio.com)
+const FRONTEND_URL = process.env.FRONTEND_URL || '*';
+const corsOptions = FRONTEND_URL === '*' ? {} : { origin: FRONTEND_URL, optionsSuccessStatus: 200 };
+app.use(cors(corsOptions));
 
 // JSON: Entender datos que vienen en formato JSON
 app.use(express.json());

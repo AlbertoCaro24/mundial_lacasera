@@ -4,41 +4,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Comprueba tu código promocional de La Casera para el Mundial 2026 y gana premios de la Selección Española.">
+  <meta name="description"
+    content="Comprueba tu código promocional de La Casera para el Mundial 2026 y gana premios de la Selección Española.">
   <meta name="theme-color" content="#D2001E">
   <title>La Casera · Mundial 2026 - Comprueba tu código</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+  <!-- Hero Image -->
+  <div class="hero-container">
+    <img src="estilos/FONDO NUEVO ROJA.png" alt="La Casera Mundial 2026" class="hero-image">
+  </div>
+
   <!-- Main Content -->
   <main class="container" role="main">
     <header>
       <h1>Comprueba tu código promocional</h1>
-      <p style="color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">¿Tienes un código de La Casera? ¡Compruébalo y gana increíbles premios de La Roja!</p>
+
     </header>
 
     <!-- Promotional Form -->
     <form action="#" method="POST" class="promo-form" novalidate>
       <div class="input-group">
         <label for="codigo" class="visually-hidden">Código promocional</label>
-        <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required autocomplete="off" aria-required="true" aria-describedby="codigoHelp">
+        <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required autocomplete="off"
+          aria-required="true" aria-describedby="codigoHelp">
         <div id="codigoHelp" class="visually-hidden">Introduce el código que aparece en tu envase de La Casera.</div>
       </div>
 
       <!-- Terms & Conditions -->
       <fieldset class="checkbox-group">
-        <legend style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;">Aceptaciones requeridas</legend>
+        <legend
+          style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;">
+          Aceptaciones requeridas</legend>
         <label class="checkbox-container">
           <input type="checkbox" name="mayor_edad" required aria-label="Confirmo que soy mayor de 16 años">
           <span class="checkmark"></span>
-          Soy mayor de 16 años
+          Soy mayor de 18 años
         </label>
 
         <label class="checkbox-container">
           <input type="checkbox" name="bases_legales" required aria-label="He leído y acepto las bases legales">
           <span class="checkmark"></span>
-          He leído y acepto las&nbsp;<a href="bases-legales.html" target="_blank" rel="noopener noreferrer">bases legales</a>.
+          He leído y acepto las&nbsp;<a href="bases-legales.html" target="_blank" rel="noopener noreferrer">bases
+            legales</a>.
         </label>
       </fieldset>
 
@@ -47,7 +57,8 @@
   </main>
 
   <!-- Result Modal -->
-  <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+    aria-hidden="true">
     <div class="modal-content">
       <h2 id="modalTitle">Resultado</h2>
       <p id="modalMessage">Mensaje del resultado</p>
@@ -154,7 +165,7 @@
         // Focus the close button for immediate keyboard access
         if (closeModal) closeModal.focus();
 
-        _onKeyDown = function(e) {
+        _onKeyDown = function (e) {
           if (e.key === 'Escape') {
             e.preventDefault();
             closeAndReset();

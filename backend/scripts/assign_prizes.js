@@ -14,7 +14,7 @@ async function assignPrizes() {
         // 1. Buscar códigos que NO tengan premio y NO estén usados
         // Usamos $sample para coger aleatorios
         const randomCodes = await Code.aggregate([
-            { $match: { isPrize: false, isUsed: false } },
+            { $match: { isPrize: false, used: false } },
             { $sample: { size: PRIZES_TO_GIVE } }
         ]);
 

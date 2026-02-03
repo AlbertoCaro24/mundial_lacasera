@@ -7,19 +7,12 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // Configurar Nodemailer
-// Configurar Nodemailer con ajustes explícitos para evitar Timeouts en Render
 const emailTransporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true para 465, false para otros puertos
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
-    // Añadimos timeout para que no se quede colgado indefinidamente
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000
+    }
 });
 
 /**
@@ -53,7 +46,7 @@ router.post('/check-code', async (req, res) => {
         }
 
         // CASO B: El código ya se usó (¡Alerta de pillo!)
-        if (foundCode.isUsed) {
+        if (foundCode.used) {
             return res.json({
                 success: false,
                 message: "Este código ya ha sido canjeado."
@@ -87,15 +80,20 @@ router.post('/register-winner', async (req, res) => {
         const cleanCode = code ? code.trim().toUpperCase() : '';
 
         // 1. Validación de seguridad CRÍTICA: "Atomicidad"
-        // Buscamos el código Y verificamos que esté 'isUsed: false' EN LA MISMA ORDEN.
-        // Si alguien lo canjeó hace 1 milisegundo, esta operación fallará.
+        // Generamos un _id para el posible ganador y reservamos el código en una sola operación.
+        const mongoose = require('mongoose');
+        const winnerId = new mongoose.Types.ObjectId();
+
         const codeDoc = await Code.findOneAndUpdate(
-            { code: cleanCode, isUsed: false }, // Filtro: debe existir y NO estar usado
+            { code: cleanCode, used: false }, // Filtro: debe existir y NO estar usado
             {
                 $set: {
-                    isUsed: true,
-                    "usedBy.ip": req.ip,
-                    "usedBy.date": new Date()
+                    used: true,
+                    usedAt: new Date(),
+                    userId: winnerId,
+                    ip: req.ip,
+                    userAgent: req.get('User-Agent') || '',
+                    result: 'PENDING'
                 }
             },
             { new: true } // Devuelve el documento actualizado
@@ -109,17 +107,16 @@ router.post('/register-winner', async (req, res) => {
             });
         }
 
-        // 2. Verificar que REALMENTE tenía premio (doble check de seguridad)
+        // Aquí decidimos si es premiado o no según el campo existente `isPrize`
         if (!codeDoc.isPrize) {
-            // Esto sería raro si el frontend funciona bien, pero por seguridad...
-            return res.status(400).json({
-                success: false,
-                message: "Este código no tiene premio."
-            });
+            // Código válido pero sin premio -> marcamos como 'LOSE' y devolvemos error claro
+            await Code.findByIdAndUpdate(codeDoc._id, { $set: { result: 'LOSE' } });
+            return res.status(400).json({ success: false, message: 'Este código no tiene premio.' });
         }
 
-        // 3. Guardar al Ganador
+        // Código tiene premio: creamos el ganador con el _id reservado previamente
         const newWinner = new Winner({
+            _id: codeDoc.userId, // usamos el _id reservado
             nombre,
             apellidos,
             email,
@@ -131,8 +128,10 @@ router.post('/register-winner', async (req, res) => {
 
         await newWinner.save();
 
-        // 3.5. Enviar email de confirmación al ganador (DESACTIVADO POR ERROR ETIMEDOUT)
-        /*
+        // Actualizamos el código con resultado definitivo
+        await Code.findByIdAndUpdate(codeDoc._id, { $set: { result: 'WIN' } });
+
+        // Enviar email de confirmación al ganador
         try {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
@@ -155,7 +154,6 @@ router.post('/register-winner', async (req, res) => {
             winston.error('Error al enviar email de confirmación:', emailError);
             // No fallar la respuesta por error de email
         }
-        */
 
         winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
 

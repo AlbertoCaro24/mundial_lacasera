@@ -50,7 +50,7 @@ async function startFactory() {
             batch.push({
                 code: newCode,
                 isPrize: false, // Por defecto no tienen premio (luego asignamos los premios)
-                isUsed: false
+                used: false
             });
 
             // Si el lote está lleno, lo mandamos a la BBDD
