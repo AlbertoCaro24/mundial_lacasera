@@ -10,12 +10,19 @@ require('dotenv').config();
 const app = express();
 
 // Configurar Nodemailer para envío de emails
+/* 
+LOGIC DISABLED AS PER USER REQUEST
 const emailTransporter = nodemailer.createTransport({
-    service: 'gmail', // O el servicio que uses (ej: 'outlook', 'yahoo')
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Usar SSL
     auth: {
-        user: process.env.EMAIL_USER, // Tu email
-        pass: process.env.EMAIL_PASS  // Contraseña o app password
-    }
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    connectionTimeout: 10000, // 10 segundos de timeout
+    greetingTimeout: 5000,
+    socketTimeout: 10000
 });
 
 // Verificar conexión de email al iniciar
@@ -26,6 +33,7 @@ emailTransporter.verify((error, success) => {
         logger.info('Servidor de email listo para enviar mensajes');
     }
 });
+*/
 
 // Configurar Winston para logging avanzado
 const logger = winston.createLogger({

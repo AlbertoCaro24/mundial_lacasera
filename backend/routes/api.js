@@ -8,11 +8,14 @@ require('dotenv').config();
 
 // Configurar Nodemailer
 const emailTransporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    connectionTimeout: 10000 // 10 segundos
 });
 
 /**
@@ -150,6 +153,8 @@ router.post('/register-winner', async (req, res) => {
         await Code.findByIdAndUpdate(codeDoc._id, { $set: { result: 'WIN' } });
 
         // Enviar email de confirmación al ganador
+        /* 
+        LOGIC DISABLED AS PER USER REQUEST
         try {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
@@ -172,6 +177,7 @@ router.post('/register-winner', async (req, res) => {
             winston.error('Error al enviar email de confirmación:', emailError);
             // No fallar la respuesta por error de email
         }
+        */
 
         winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
 
