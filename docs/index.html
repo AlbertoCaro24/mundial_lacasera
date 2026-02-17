@@ -14,11 +14,15 @@
 <body>
   <!-- Hero Image -->
   <div class="hero-container">
-    <img src="estilos/FONDO NUEVO ROJA.png" alt="La Casera Mundial 2026" class="hero-image">
+    <img src="estilos/FONDO NUEVO ROJA1.png" alt="La Casera Mundial 2026" class="hero-image">
   </div>
 
   <!-- Main Content -->
-  <main class="container" role="main">
+  <main class="container bottom-drawer" role="main" id="formContainer">
+    <!-- Bottom Tab Trigger (Inside container) -->
+    <button id="bottomTabBtn" class="bottom-tab-btn" aria-expanded="false" aria-controls="formContainer">
+      Comprueba tu código promocional <span class="arrow-icon">↑</span>
+    </button>
     <header>
       <h1>Comprueba tu código promocional</h1>
 
@@ -26,6 +30,8 @@
 
     <!-- Promotional Form -->
     <form action="#" method="POST" class="promo-form" novalidate>
+
+
       <div class="input-group">
         <label for="codigo" class="visually-hidden">Código promocional</label>
         <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required autocomplete="off"
@@ -54,7 +60,16 @@
 
       <button type="submit" class="submit-btn" id="submitBtn">Enviar →</button>
     </form>
+    <footer style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gray-medium);">
+      <p style="text-align: center; font-size: 0.85rem;">
+        <a href="bases-legales.html" target="_blank">Bases Legales</a> |
+        <a href="politica-privacidad.html" target="_blank">Política de Privacidad</a> |
+        <a href="politica-cookies.html" target="_blank">Política de Cookies</a>
+      </p>
+    </footer>
   </main>
+
+
 
   <!-- Result Modal -->
   <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
@@ -66,10 +81,34 @@
     </div>
   </div>
 
+
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const tabBtn = document.getElementById('bottomTabBtn');
+      const container = document.getElementById('formContainer');
+      const arrow = tabBtn.querySelector('.arrow-icon');
+
+      if (tabBtn && container) {
+        tabBtn.addEventListener('click', () => {
+          const isOpen = container.classList.toggle('open');
+          tabBtn.setAttribute('aria-expanded', isOpen);
+
+          if (isOpen) {
+            arrow.textContent = '↓';
+            tabBtn.classList.add('active');
+          } else {
+            arrow.textContent = '↑';
+            tabBtn.classList.remove('active');
+          }
+        });
+
+        // Optional: Close when clicking outside (on the overlay mostly)
+        // Since the container covers almost everything when open, this might be tricky to implement purely based on "outside" 
+        // without an explicit overlay element. For now, the button toggles it.
+      }
+
       const form = document.querySelector('.promo-form');
-      const modal = document.getElementById('resultModal');
       const modalTitle = document.getElementById('modalTitle');
       const modalMessage = document.getElementById('modalMessage');
       const closeModal = document.getElementById('closeModal');
@@ -100,6 +139,29 @@
           closeAndReset();
         }
       });
+
+      // Cookie Banner Logic
+      const cookieBanner = document.getElementById('cookieBanner');
+      const acceptCookiesBtn = document.getElementById('acceptCookies');
+      const rejectCookiesBtn = document.getElementById('rejectCookies');
+
+      // Use a versioned key to force it to show for users who might have old data or for testing
+      const COOKIE_KEY = 'cookiesAccepted_v1';
+
+      if (!localStorage.getItem(COOKIE_KEY)) {
+        cookieBanner.classList.add('visible');
+      }
+
+      acceptCookiesBtn.addEventListener('click', () => {
+        localStorage.setItem(COOKIE_KEY, 'true');
+        cookieBanner.classList.remove('visible');
+      });
+
+      rejectCookiesBtn.addEventListener('click', () => {
+        localStorage.setItem(COOKIE_KEY, 'rejected');
+        cookieBanner.classList.remove('visible');
+      });
+
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();

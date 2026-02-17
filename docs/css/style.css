@@ -100,8 +100,13 @@ body {
 }
 
 .hero-container {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    /* max-height eliminado */
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -110,10 +115,9 @@ body {
 
 .hero-image {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
-    max-width: 100%;
-    display: block;
+    object-position: top center;
 }
 
 /* ========================================
@@ -131,12 +135,105 @@ body {
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    animation: slideInUp 0.6s ease-out;
-    margin-top: -500px;
+    /* animation: slideInUp 0.6s ease-out; Removed to fix flash */
+
+    /* Changed from negative margin to positive spacer */
+    margin-top: 30vh;
+
     /* Superponer ligeramente la tarjeta sobre la imagen si se desea, o dejar en 0 */
     position: relative;
     z-index: 10;
+
     margin-bottom: var(--space-2xl);
+}
+
+/* Bottom Drawer Container */
+/* Bottom Drawer Container */
+.container.bottom-drawer {
+    margin-top: 0;
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    /* Start off-screen: 50vh (to bottom) + 100% height (to move top edge to bottom) */
+    transform: translate(-50%, calc(50vh + 100%));
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    z-index: 1000;
+    transition: transform 3s cubic-bezier(0.19, 1, 0.22, 1);
+    /* 3s Expo Out - Smooth & Premium */
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+    /* Enhanced shadow */
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+    /* Ensure it doesn't cover the tab when closed, but handled by transform */
+    max-height: 85vh;
+    overflow: visible;
+    /* Changed from auto to visible so button isn't clipped */
+}
+
+.container.bottom-drawer.open {
+    bottom: 50%;
+    transform: translate(-50%, 50%);
+    border-radius: 12px;
+}
+
+/* Bottom Tab Button */
+/* Bottom Tab Button */
+.bottom-tab-btn {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    /* Move up by its own height to sit on top */
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    padding: var(--space-lg) var(--space-2xl);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    font-family: 'Garage Gotic Board', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    transition: all 0.3s ease;
+    min-width: 300px;
+    justify-content: center;
+    bottom: auto;
+}
+
+.bottom-tab-btn:hover {
+    background: var(--primary-dark);
+    padding-bottom: var(--space-lg);
+    /* Slight lift/grow effect */
+}
+
+.bottom-tab-btn.active {
+    box-shadow: none;
+    /* Blend with container? Or keep separate */
+    bottom: auto;
+    /* Moves with container? No, keep it fixed or moving is complex. 
+       Let's keep it fixed at bottom, but maybe change appearance. */
+    z-index: 1100;
+}
+
+/* When drawer is open, we might want to move the button up or attach it to the drawer header.
+   Simpler approach: Button stays at bottom, acting as "Close".
+*/
+.container.bottom-drawer.open~.bottom-tab-btn {
+    /* If we want it to move up with drawer triggers:
+       transform: translateX(-50%) translateY( - [drawerHeight] ); 
+       Hard to know height dynamically in CSS without JS. 
+       
+       Alternative: The button IS the toggle.
+       Let's keep it fixed at bottom.
+    */
+    background: var(--primary-dark);
 }
 
 /* Overlay blanco semi-transparente para legibilidad */
@@ -209,7 +306,6 @@ p {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-    animation: fadeInUp 0.6s ease-out 0.2s backwards;
 }
 
 /* Input Group */
@@ -702,6 +798,77 @@ p {
 }
 
 /* ========================================
+   COOKIE BANNER
+   ======================================== */
+
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #FFFFFF;
+    color: var(--gray-dark);
+    padding: var(--space-lg);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    border-top: 4px solid var(--primary-red);
+    transform: translateY(100%);
+    transition: transform var(--transition-smooth);
+}
+
+.cookie-banner.visible {
+    transform: translateY(0);
+}
+
+.cookie-text {
+    flex: 1;
+    min-width: 300px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.cookie-buttons {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.cookie-btn {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+    text-transform: uppercase;
+}
+
+.cookie-btn-accept {
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+}
+
+.cookie-btn-accept:hover {
+    background: var(--primary-dark);
+}
+
+.cookie-btn-reject {
+    background: transparent;
+    color: var(--gray-dark);
+    border: 2px solid var(--gray-medium);
+}
+
+.cookie-btn-reject:hover {
+    border-color: var(--gray-dark);
+}
+
+/* ========================================
    ANIMATIONS
    ======================================== */
 
@@ -816,14 +983,15 @@ p {
     }
 
     .hero-image {
-        min-height: 500px;
-        /* Forzar altura en móvil para que se vea grande */
+        /* min-height: 500px; Removed, now full screen fixed */
+        height: 100%;
     }
 
     .container {
         border-radius: 6px;
         /* Ajuste específico para móvil */
-        margin-top: -250px;
+        margin-top: 20vh;
+        /* Was -250px */
         max-width: 95%;
     }
 
@@ -917,6 +1085,50 @@ p {
     .thank-you-container h2 {
         font-size: 1.2rem;
     }
+
+    /* Mobile adjustments for bottom drawer */
+    .container.bottom-drawer {
+        margin-top: 0;
+        /* Reset negative margin from desktop static layout */
+        width: 100%;
+        max-width: 100%;
+        border-radius: 12px 12px 0 0;
+        /* Round top corners only */
+        left: 0;
+        bottom: 0;
+        /* Force bottom sheet on mobile */
+        transform: translateY(100%);
+        /* Reset translateX since we use left:0 width:100% */
+    }
+
+    .container.bottom-drawer.open {
+        bottom: 0;
+        transform: translateY(0);
+        border-radius: 12px 12px 0 0;
+        height: 80vh;
+        /* Fixed height on mobile for better experience? */
+    }
+
+    /* Mobile adjustments for bottom tab button */
+    .bottom-tab-btn {
+        width: 100%;
+        /* Full width handle */
+        min-width: unset;
+        border-radius: 16px 16px 0 0;
+        /* Matched radius */
+        padding: var(--space-md) var(--space-sm);
+        font-size: 1.1rem;
+        /* Adjusted font size */
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: auto;
+        transform: translateY(-100%);
+        /* Sit on top */
+        justify-content: center;
+    }
+
 
     .thank-you-msg {
         font-size: 0.9rem;

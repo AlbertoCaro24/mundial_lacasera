@@ -13,12 +13,13 @@
 <body>
     <!-- Hero Image -->
     <div class="hero-container">
-        <img src="estilos/FONDO NUEVO ROJA.png" alt="La Casera Mundial 2026" class="hero-image">
+        <img src="estilos/FONDO NUEVO ROJA1.png" alt="La Casera Mundial 2026" class="hero-image">
     </div>
-
     <main class="container" role="main">
         <header>
             <h1>¡Enhorabuena! Reclama tu premio</h1>
+            <p style="margin-bottom: 2rem; color: #555; font-size: 0.95rem;">Rellena tus datos para recibir tu pack de
+                La Roja.</p>
         </header>
 
         <form action="#" method="POST" class="promo-form" novalidate>
@@ -64,11 +65,6 @@
         document.querySelector('.promo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Evitar doble envío
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando...';
-
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
 
@@ -82,7 +78,7 @@
             data.code = winningCode; // Añadimos el código a los datos a enviar
 
             try {
-                const API_BASE = 'https://lacasera-backend.onrender.com';
+                const API_BASE = window.__API_BASE__ || '';
                 const response = await fetch(`${API_BASE}/api/register-winner`, {
                     method: 'POST',
                     headers: {
@@ -99,15 +95,10 @@
                     window.location.href = 'gracias.html';
                 } else {
                     alert('Error: ' + result.message);
-                    // Reactivar botón si hay error de negocio (aunque si el código se quemó, no servirá de mucho reintentar, pero por UX)
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Solicitar premio';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Hubo un problema al conectar con el servidor.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Solicitar premio';
             }
         });
     </script>

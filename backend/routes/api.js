@@ -8,14 +8,11 @@ require('dotenv').config();
 
 // Configurar Nodemailer
 const emailTransporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
-    connectionTimeout: 10000 // 10 segundos
+    }
 });
 
 /**
@@ -49,7 +46,7 @@ router.post('/check-code', async (req, res) => {
         }
 
         // CASO B: El código ya se usó (¡Alerta de pillo!)
-        if (foundCode.used || foundCode.isUsed) {
+        if (foundCode.used) {
             return res.json({
                 success: false,
                 message: "Este código ya ha sido canjeado."
@@ -57,26 +54,8 @@ router.post('/check-code', async (req, res) => {
         }
 
         // CASO C: Código válido y sin usar
-
-        // --- LOGIC FIX: Quemar códigos NO premiados ---
-        if (!foundCode.isPrize) {
-            // Si NO tiene premio, lo quemamos ya.
-            // Así evitamos que se pueda reintentar o pasar a otro.
-            await Code.findByIdAndUpdate(foundCode._id, {
-                $set: {
-                    used: true,
-                    usedAt: new Date(),
-                    ip: req.ip,
-                    result: 'LOSE',
-                    userAgent: req.get('User-Agent') || ''
-                }
-            });
-            winston.info('Código NO premiado validado y marcado como usado.', { code: cleanCode, ip: req.ip });
-        } else {
-            winston.info('Código PREMIADO validado.', { code: cleanCode, prizeType: foundCode.prizeType, ip: req.ip });
-        }
-
         // Devolvemos si tiene premio o no
+        winston.info('Código validado', { code: cleanCode, isPrize: foundCode.isPrize, prizeType: foundCode.prizeType, ip: req.ip });
         return res.json({
             success: true,
             isPrize: foundCode.isPrize,
@@ -106,10 +85,7 @@ router.post('/register-winner', async (req, res) => {
         const winnerId = new mongoose.Types.ObjectId();
 
         const codeDoc = await Code.findOneAndUpdate(
-            {
-                code: cleanCode,
-                $or: [{ used: false }, { used: { $exists: false } }]
-            }, // Filtro: debe existir y NO estar usado (admite campo used faltante)
+            { code: cleanCode, used: false }, // Filtro: debe existir y NO estar usado
             {
                 $set: {
                     used: true,
@@ -156,8 +132,6 @@ router.post('/register-winner', async (req, res) => {
         await Code.findByIdAndUpdate(codeDoc._id, { $set: { result: 'WIN' } });
 
         // Enviar email de confirmación al ganador
-        /* 
-        LOGIC DISABLED AS PER USER REQUEST
         try {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
@@ -180,7 +154,6 @@ router.post('/register-winner', async (req, res) => {
             winston.error('Error al enviar email de confirmación:', emailError);
             // No fallar la respuesta por error de email
         }
-        */
 
         winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
 
