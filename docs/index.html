@@ -1,258 +1,763 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Comprueba tu código promocional de La Casera para el Mundial 2026 y gana premios de la Selección Española.">
-  <meta name="theme-color" content="#D2001E">
-  <title>La Casera · Mundial 2026 - Comprueba tu código</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>La Casera - ¡Destapa el Verano!</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;900&family=Open+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome for Icons (replacing SVG) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#ca0034', /* Custom red requested by user */
+              darkRed: '#9e0029', /* Darker variant for hovers/headers based on new red */
+              white: '#FFFFFF',
+              cream: '#F9F7F2',
+              blue: '#D0EFFF',
+              yellow: '#efcf6d'
+            }
+          },
+          fontFamily: {
+            sans: ['"Garage Gothic Bold"', 'sans-serif'],
+            display: ['"JHCAudemars-Bold"', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 3s ease-in-out infinite',
+            'bubble': 'bubble 4s ease-in infinite',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'JHCAudemars-Bold';
+      src: url('estilos/tipos/JHCAudemars-Bold.otf') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Garage Gothic Bold';
+      src: url('estilos/tipos/Garage Gothic Bold.otf') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    /* Custom Animations */
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    @keyframes bubble {
+      0% {
+        transform: translateY(100%) scale(0.5);
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(-20%) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+    }
+
+    .pattern-bg {
+      background-image: radial-gradient(#b1091d 15%, transparent 16%), radial-gradient(#E3001B 15%, transparent 16%);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      opacity: 0.05;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      /* Constraint per requirements */
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 400px;
+    }
+
+    /* Hide scrollbar for clean horizontal scroll if needed */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+
+  <!-- Chosen Palette: La Casera Classic (Red #E3001B, White, Light Blue, Lemon Yellow) -->
+  <!-- Application Structure Plan: 
+         1. Hero Section: High impact, emotional hook ("Destapa el Verano").
+         2. Essence: Emotional connection branding text.
+         3. Mechanics (Tabs): Interactive guide on how to participate (Destapa -> Registra -> Gana).
+         4. Live Stats (Chart.js): Visualizing the "Thousands of Prizes" to create urgency and transparency (Gamification).
+         5. Values: Card grid highlighting product benefits.
+         6. CTA/Footer: Final conversion point.
+         
+         Design Rationale: Structure prioritizes emotional hook first, then clarity of mechanics, then proof/data (prizes), and finally product reassurance.
+    -->
+  <!-- Visualization & Content Choices:
+         - Mechanics: Interactive Steps (Click/Hover) to simplify the process.
+         - Prizes: Doughnut Chart to visualize the variety of prizes available (Visualizing "Miles de premios").
+         - Values: Icon cards for quick readability.
+         - NO SVG/Mermaid used. FontAwesome and CSS shapes used instead.
+    -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
 
-<body>
-  <!-- Hero Image -->
-  <div class="hero-container">
-    <img src="estilos/FONDO NUEVO ROJA1.png" alt="La Casera Mundial 2026" class="hero-image">
-  </div>
+<body class="bg-brand-cream text-[#002d72] font-sans antialiased overflow-x-hidden">
 
-  <!-- Main Content -->
-  <main class="container bottom-drawer" role="main" id="formContainer">
-    <!-- Bottom Tab Trigger (Inside container) -->
-    <button id="bottomTabBtn" class="bottom-tab-btn" aria-expanded="false" aria-controls="formContainer">
-      Comprueba tu código promocional <span class="arrow-icon">↑</span>
-    </button>
-    <header>
-      <h1>Comprueba tu código promocional</h1>
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-brand-darkRed shadow-lg text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-24">
+        <!-- Logo Left -->
+        <div class="flex-shrink-0 flex items-center lg:w-48">
+          <img src="estilos/LOGO LC.png" alt="La Casera Logo" class="h-16 w-auto">
+        </div>
 
-    </header>
+        <!-- Links Center -->
+        <div class="hidden md:flex flex-1 justify-center">
+          <div class="flex items-center space-x-6 lg:space-x-10">
+            <a href="#hero"
+              class="text-brand-yellow hover:text-white px-3 py-2 rounded-md text-lg lg:text-2xl font-medium transition">Inicio</a>
+            <a href="#mecanica"
+              class="text-brand-yellow hover:text-white px-3 py-2 rounded-md text-lg lg:text-2xl font-medium transition">Cómo
+              Participar</a>
+            <a href="#premios"
+              class="text-brand-yellow hover:text-white px-3 py-2 rounded-md text-lg lg:text-2xl font-medium transition">Premios</a>
+            <a href="#productos"
+              class="text-brand-yellow hover:text-white px-3 py-2 rounded-md text-lg lg:text-2xl font-medium transition">Productos</a>
+          </div>
+        </div>
 
-    <!-- Promotional Form -->
-    <form action="#" method="POST" class="promo-form" novalidate>
+        <!-- Button Right -->
+        <div class="hidden md:flex flex-shrink-0 lg:w-48 justify-end">
+          <button onclick="scrollToSection('cta')"
+            class="bg-white text-brand-darkRed font-bold px-6 py-3 rounded-full hover:shadow-lg transition transform hover:scale-105 text-lg">
+            ¡PARTICIPA YA!
+          </button>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="-mr-2 flex md:hidden">
+          <button type="button"
+            class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-brand-darkRed focus:outline-none"
+            aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-btn">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="md:hidden hidden bg-brand-red border-t border-brand-darkRed" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a href="#hero" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-darkRed">Inicio</a>
+        <a href="#mecanica" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-darkRed">Cómo
+          Participar</a>
+        <a href="#premios" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-darkRed">Premios</a>
+        <a href="#cta"
+          class="block px-3 py-2 rounded-md text-base font-bold bg-white text-brand-red mt-4 text-center">¡PARTICIPA!</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative pt-24 pb-12 lg:pt-32 lg:pb-24 overflow-hidden bg-brand-red">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 bg-cover"
+      style="background-image: url('estilos/FONDO NUEVO ROJA1.png'); background-position: center 75px; background-repeat: no-repeat;">
+    </div>
+    <div class="absolute inset-0 bg-black/20"></div> <!-- Slight overlay for text readability, optional -->
+    <div id="bubbles-container" class="absolute inset-0 pointer-events-none z-0"></div>
 
 
-      <div class="input-group">
-        <label for="codigo" class="visually-hidden">Código promocional</label>
-        <input type="text" id="codigo" name="codigo" placeholder="CÓDIGO *" required autocomplete="off"
-          aria-required="true" aria-describedby="codigoHelp">
-        <div id="codigoHelp" class="visually-hidden">Introduce el código que aparece en tu envase de La Casera.</div>
+    </div>
+    </div>
+
+    <!-- Hero Image Simulation -->
+    <div class="relative flex justify-center lg:justify-end animate-float">
+      <div class="relative w-72 h-96 lg:w-96 lg:h-[500px] flex items-center justify-center overflow-hidden">
+        <!-- Bottle Image -->
+
+
+      </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Wave Separator -->
+    <div class="absolute bottom-0 w-full leading-none z-10">
+      <svg class="block w-full h-12 sm:h-24" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#F9F7F2" fill-opacity="1"
+          d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+        </path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Essence Section -->
+  <section id="essence" class="py-16 lg:py-24 bg-brand-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+        <div class="relative mb-10 lg:mb-0 order-1 lg:order-2">
+          <!-- Polaroid Style Image Container -->
+          <div class="bg-white p-4 shadow-xl transform rotate-2 max-w-md mx-auto">
+            <div class="h-64 flex items-center justify-center overflow-hidden">
+              <img src="estilos/verano_postal.png" alt="Reunión Familiar en Verano" class="object-cover w-full h-full">
+            </div>
+          </div>
+        </div>
+
+        <div class="order-2 lg:order-1">
+          <h2 class="text-3xl lg:text-4xl font-display font-bold text-brand-red mb-6">
+            Porque lo bueno, se comparte.
+          </h2>
+          <p class="text-lg text-[#002d72] mb-6 leading-relaxed">
+            No hay nada como el calor de los nuestros, las risas en la mesa y el frescor de La Casera.
+            Este año, queremos que cada brindis, cada comida familiar y cada aperitivo tenga premio.
+          </p>
+          <div class="p-6 bg-white rounded-xl shadow-md border-l-4 border-brand-red">
+            <p class="italic text-[#002d72] font-medium">
+              "Porque si estamos juntos, ya hemos ganado."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mechanics Section (Steps) -->
+  <section id="mecanica" class="py-16 lg:py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-brand-red font-bold tracking-wider uppercase text-sm">¿Cómo funciona?</span>
+        <h2 class="text-4xl font-display font-black text-[#002d72] mt-2">4 Pasos para Ganar</h2>
+        <p class="text-[#002d72] mt-4 max-w-2xl mx-auto">
+          Participar es tan fácil como disfrutar de un Tinto de Verano bien frío.
+        </p>
       </div>
 
-      <!-- Terms & Conditions -->
-      <fieldset class="checkbox-group">
-        <legend
-          style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;">
-          Aceptaciones requeridas</legend>
-        <label class="checkbox-container">
-          <input type="checkbox" name="mayor_edad" required aria-label="Confirmo que soy mayor de 16 años">
-          <span class="checkmark"></span>
-          Soy mayor de 18 años
-        </label>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative z-10">
+        <!-- Step 1 -->
+        <div
+          class="group relative bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:border-brand-red transition-all duration-300 text-center cursor-default step-card"
+          data-step="1">
+          <div
+            class="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 group-hover:scale-110 transition shadow-lg ring-4 ring-brand-red/20">
+            1
+          </div>
+          <div class="mb-6 h-20 flex items-center justify-center">
+            <i class="fas fa-bottle-water text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
+          </div>
+          <h3 class="text-xl font-bold text-[#002d72] mb-3">PIDE LA CASERA® TINTO DE VERANO</h3>
+          <p class="text-[#002d72] text-sm">
+            Pide La Casera® Tinto de Verano en tu establecimiento favorito.
+          </p>
+        </div>
 
-        <label class="checkbox-container">
-          <input type="checkbox" name="bases_legales" required aria-label="He leído y acepto las bases legales">
-          <span class="checkmark"></span>
-          He leído y acepto las&nbsp;<a href="bases-legales.html" target="_blank" rel="noopener noreferrer">bases
-            legales</a>.
-        </label>
-      </fieldset>
+        <!-- Step 2 -->
+        <div
+          class="group relative bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:border-brand-red transition-all duration-300 text-center cursor-default step-card"
+          data-step="2">
+          <div
+            class="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 group-hover:scale-110 transition shadow-lg ring-4 ring-brand-red/20">
+            2
+          </div>
+          <div class="mb-6 h-20 flex items-center justify-center">
+            <i class="fas fa-qrcode text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
+          </div>
+          <h3 class="text-xl font-bold text-[#002d72] mb-3">ESCANEA EL QR</h3>
+          <p class="text-[#002d72] text-sm">
+            Escanea el QR y entra a la promo.
+          </p>
+        </div>
 
-      <button type="submit" class="submit-btn" id="submitBtn">Enviar →</button>
-    </form>
-    <footer style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gray-medium);">
-      <p style="text-align: center; font-size: 0.85rem;">
-        <a href="bases-legales.html" target="_blank">Bases Legales</a> |
-        <a href="politica-privacidad.html" target="_blank">Política de Privacidad</a> |
-        <a href="politica-cookies.html" target="_blank">Política de Cookies</a>
-      </p>
-    </footer>
-  </main>
+        <!-- Step 3 -->
+        <div
+          class="group relative bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:border-brand-red transition-all duration-300 text-center cursor-default step-card"
+          data-step="3">
+          <div
+            class="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 group-hover:scale-110 transition shadow-lg ring-4 ring-brand-red/20">
+            3
+          </div>
+          <div class="mb-6 h-20 flex items-center justify-center">
+            <i class="fas fa-keyboard text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
+          </div>
+          <h3 class="text-xl font-bold text-[#002d72] mb-3">CÓDIGO ALFANUMÉRICO</h3>
+          <p class="text-[#002d72] text-sm">
+            Introduce el código alfanumérico que se recibes al pedir La Casera® Tinto de Verano.
+          </p>
+        </div>
 
+        <!-- Step 4 -->
+        <div
+          class="group relative bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:border-brand-red transition-all duration-300 text-center cursor-default step-card"
+          data-step="4">
+          <div
+            class="w-16 h-16 bg-brand-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 group-hover:scale-110 transition shadow-lg ring-4 ring-brand-red/20">
+            4
+          </div>
+          <div class="mb-6 h-20 flex items-center justify-center">
+            <i class="fas fa-gift text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
+          </div>
+          <h3 class="text-xl font-bold text-[#002d72] mb-3">GANA</h3>
+          <p class="text-[#002d72] text-sm">
+            ¡Descubre al instante si has ganado! Miles de premios te esperan para tu verano.
+          </p>
+        </div>
+      </div>
 
+      <!-- Connection Line (Desktop) -->
+      <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-100 -z-0 transform -translate-y-8"></div>
+    </div>
+  </section>
 
-  <!-- Result Modal -->
-  <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
-    aria-hidden="true">
-    <div class="modal-content">
-      <h2 id="modalTitle">Resultado</h2>
-      <p id="modalMessage">Mensaje del resultado</p>
-      <button class="close-modal" id="closeModal" aria-label="Cerrar modal">Cerrar</button>
+  <!-- Values / Product Section -->
+  <section id="productos" class="py-16 bg-brand-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-display font-bold text-[#002d72]">NUESTROS PRODUCTOS</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Producto 1: Clásico -->
+        <div
+          class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition transform hover:-translate-y-2 flex flex-col items-center">
+          <div class="h-64 w-full flex items-center justify-center mb-6">
+            <img src="estilos/tinto_de_verano.png" alt="Tinto de Verano Clásico"
+              class="object-contain h-full drop-shadow-lg">
+          </div>
+          <h3 class="text-xl font-sans font-bold mb-2">TINTO DE VERANO CLÁSICO</h3>
+          <p class="text-[#002d72] text-sm">El sabor original y refrescante de siempre.</p>
+        </div>
+
+        <!-- Producto 2: Limón -->
+        <div
+          class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition transform hover:-translate-y-2 flex flex-col items-center">
+          <div class="h-64 w-full flex items-center justify-center mb-6">
+            <img src="estilos/botella_tinto_de_verano_limon.png" alt="Tinto de Verano con Limón"
+              class="object-contain h-full drop-shadow-lg">
+          </div>
+          <h3 class="text-xl font-sans font-bold mb-2">TINTO DE VERANO CON LIMÓN</h3>
+          <p class="text-[#002d72] text-sm">Con un toque cítrico que lo hace irresistible.</p>
+        </div>
+
+        <!-- Producto 3: Limón 0,0 -->
+        <div
+          class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition transform hover:-translate-y-2 flex flex-col items-center">
+          <div class="h-64 w-full flex items-center justify-center mb-6">
+            <img src="estilos/tinto_de_verano_limon0,0.png" alt="Tinto de Verano Limón 0,0"
+              class="object-contain h-full drop-shadow-lg">
+          </div>
+          <h3 class="text-xl font-sans font-bold mb-2">TINTO DE VERANO LIMÓN 0,0</h3>
+          <p class="text-[#002d72] text-sm">0% alcohol, 0% azúcares, 100% sabor a verano.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA & Footer Section -->
+  <section id="cta" class="relative py-24 bg-gray-900 overflow-hidden text-center">
+    <!-- Background Overlay Image Simulation -->
+    <div class="absolute inset-0 bg-gradient-to-r from-brand-red to-red-900 opacity-60 z-10"></div>
+    <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('estilos/fondo_formulario.png')">
+    </div>
+
+    <div class="relative z-20 max-w-4xl mx-auto px-4">
+      <div class="w-full max-w-md md:max-w-2xl mx-auto text-center space-y-6">
+
+        <h2
+          class="text-4xl md:text-6xl font-display font-black text-white uppercase leading-[0.9] tracking-tight drop-shadow-xl">
+          <span class="block text-brand-yellow mb-2 text-2xl md:text-3xl font-bold tracking-normal font-sans">Gana
+            premios de la</span>
+          Selección Española
+        </h2>
+
+        <p class="text-white/80 text-sm md:text-base leading-relaxed px-4 shadow-sm">
+          ¿Tienes un código de tu botella de La Casera® Tinto de Verano? Introdúcelo ahora y descubre al instante si has
+          ganado
+          equipaciones, balones y mucho más.
+        </p>
+
+        <!-- MAIN ACTION FORM -->
+        <div class="mt-8 bg-white/10 backdrop-blur-md border border-white/20 p-5 md:p-8 rounded-3xl shadow-2xl">
+          <!-- Form View -->
+          <form id="promo-form" class="flex flex-col gap-4">
+            <div class="relative">
+              <input type="text" id="promo-code" placeholder="Ej: LCSA-1234-SPN"
+                class="w-full bg-white text-gray-900 text-center font-mono text-xl md:text-2xl font-bold rounded-2xl py-4 px-4 shadow-inner focus:outline-none focus:ring-4 focus:ring-brand-yellow/50 transition-all placeholder:text-gray-400 placeholder:font-sans placeholder:font-normal placeholder:text-base uppercase" />
+            </div>
+
+            <button type="submit" id="check-code-btn"
+              class="group relative w-full flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darkRed font-black text-lg py-4 px-6 rounded-2xl shadow-[0_4px_0_rgb(180,83,9)] hover:shadow-[0_2px_0_rgb(180,83,9)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px] transition-all mt-2">
+              COMPROBAR CÓDIGO
+              <i class="fas fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </form>
+
+          <!-- Success State (Hidden by default, can be toggled via JS) -->
+          <div id="success-state" class="hidden py-6 flex flex-col items-center animate-fade-in">
+            <div
+              class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+              <i class="fas fa-check-circle text-white text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">¡Código Válido!</h3>
+            <p class="text-green-200 text-center text-sm">Revisa tu correo para descubrir tu premio.</p>
+            <button id="reset-form-btn" type="button" class="mt-6 text-sm text-brand-yellow font-bold hover:underline">
+              Introducir otro código
+            </button>
+          </div>
+
+          <!-- SECONDARY ACTION -->
+          <div class="mt-6 pt-5 border-t border-white/10">
+            <p class="text-white/80 text-xs text-center mb-3">¿Has comprado en supermercado y no tienes código?</p>
+            <button type="button"
+              class="w-full justify-center gap-2 bg-transparent border-2 border-white/30 hover:bg-white/10 text-white font-bold py-3 px-4 rounded-xl transition-colors flex items-center">
+              <i class="fas fa-ticket-alt"></i>
+              SUBIR MI TICKET DE COMPRA
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-darkRed text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <span class="font-display font-black text-xl">La Casera® Tinto de Verano</span>
+        </div>
+        <div class="text-sm text-white/70 space-y-2">
+          <a href="#" class="block hover:text-white">Términos y Condiciones</a>
+          <a href="#" class="block hover:text-white">Política de Privacidad</a>
+          <a href="#" class="block hover:text-white">Preguntas Frecuentes</a>
+        </div>
+        <div class="flex space-x-6 justify-start md:justify-end">
+          <a href="https://www.instagram.com/lacasera_es/" class="text-white hover:text-brand-yellow transition"><i
+              class="fab fa-instagram text-2xl"></i></a>
+          <a href="https://www.facebook.com/lacaseraespana" class="text-white hover:text-brand-yellow transition"><i
+              class="fab fa-facebook text-2xl"></i></a>
+          <a href="https://twitter.com/La_Casera" class="text-white hover:text-brand-yellow transition"><i
+              class="fab fa-twitter text-2xl"></i></a>
+          <a href="https://www.youtube.com/user/PedazoinventoCasera"
+            class="text-white hover:text-brand-yellow transition"><i class="fab fa-youtube text-2xl"></i></a>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-8 text-center text-xs text-white/50">
+        <p>Promoción válida del 15/04/2026 al 31/07/2026. Solo para mayores de 18 años.</p>
+        <p class="mt-2">&copy; 2026 La Casera® Tinto de Verano. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Simulation -->
+  <div id="modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+    aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-overlay">
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div
+        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+              <i class="fas fa-info text-brand-red"></i>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-lg leading-6 font-medium text-[#002d72]" id="modal-title">Simulación de Registro</h3>
+              <div class="mt-2">
+                <p class="text-sm text-[#002d72]">
+                  En la campaña real, este botón llevaría al formulario de registro o abriría la API de WhatsApp.
+                  ¡Gracias por probar la demo!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button" id="close-modal"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-red text-base font-medium text-white hover:bg-brand-darkRed focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+            Entendido
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-
-
+  <!-- JavaScript Logic -->
   <script>
+    // State Management
+    const state = {
+      prizesLeft: 1245,
+      prizesData: {
+        labels: ['Kits de Verano', 'Descuentos', 'Experiencias VIP', 'Otros'],
+        data: [45, 30, 5, 20]
+      },
+      chartInstance: null
+    };
+
+    // DOM Elements
+    const navbar = document.getElementById('navbar');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const bubblesContainer = document.getElementById('bubbles-container');
+    const modal = document.getElementById('modal');
+    const modalOverlay = document.getElementById('modal-overlay');
+    const closeModalBtn = document.getElementById('close-modal');
+    const ctaButtons = [document.getElementById('cta-whatsapp'), document.getElementById('cta-web')];
+
+    // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
-      const tabBtn = document.getElementById('bottomTabBtn');
-      const container = document.getElementById('formContainer');
-      const arrow = tabBtn.querySelector('.arrow-icon');
+      initBubbles();
+      initChart();
+      setupEventListeners();
+    });
 
-      if (tabBtn && container) {
-        tabBtn.addEventListener('click', () => {
-          const isOpen = container.classList.toggle('open');
-          tabBtn.setAttribute('aria-expanded', isOpen);
+    // --- Core Interactions ---
 
-          if (isOpen) {
-            arrow.textContent = '↓';
-            tabBtn.classList.add('active');
-          } else {
-            arrow.textContent = '↑';
-            tabBtn.classList.remove('active');
-          }
-        });
-
-        // Optional: Close when clicking outside (on the overlay mostly)
-        // Since the container covers almost everything when open, this might be tricky to implement purely based on "outside" 
-        // without an explicit overlay element. For now, the button toggles it.
+    // 1. Navigation Scroll
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        // Close mobile menu if open
+        mobileMenu.classList.add('hidden');
       }
+    }
 
-      const form = document.querySelector('.promo-form');
-      const modalTitle = document.getElementById('modalTitle');
-      const modalMessage = document.getElementById('modalMessage');
-      const closeModal = document.getElementById('closeModal');
-
-      // Close modal and reset input (with focus return)
-      let _previousFocus = null;
-      let _onKeyDown = null;
-
-      function closeAndReset() {
-        modal.classList.remove('active');
-        modal.setAttribute('aria-hidden', 'true');
-        if (_onKeyDown) document.removeEventListener('keydown', _onKeyDown);
-        const codigoInput = document.getElementById('codigo');
-        codigoInput.value = '';
-        if (_previousFocus && typeof _previousFocus.focus === 'function') {
-          _previousFocus.focus();
-        } else {
-          codigoInput.focus();
-        }
-      }
-
-      // Close modal event
-      closeModal.addEventListener('click', closeAndReset);
-
-      // Close on click outside
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          closeAndReset();
-        }
-      });
-
-      // Cookie Banner Logic
-      const cookieBanner = document.getElementById('cookieBanner');
-      const acceptCookiesBtn = document.getElementById('acceptCookies');
-      const rejectCookiesBtn = document.getElementById('rejectCookies');
-
-      // Use a versioned key to force it to show for users who might have old data or for testing
-      const COOKIE_KEY = 'cookiesAccepted_v1';
-
-      if (!localStorage.getItem(COOKIE_KEY)) {
-        cookieBanner.classList.add('visible');
-      }
-
-      acceptCookiesBtn.addEventListener('click', () => {
-        localStorage.setItem(COOKIE_KEY, 'true');
-        cookieBanner.classList.remove('visible');
-      });
-
-      rejectCookiesBtn.addEventListener('click', () => {
-        localStorage.setItem(COOKIE_KEY, 'rejected');
-        cookieBanner.classList.remove('visible');
-      });
-
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const codigoInput = document.getElementById('codigo');
-        const codigo = codigoInput.value.trim();
-
-        if (!codigo) {
-          return; // HTML5 'required' should handle this, but double check
-        }
-
-        // Verificar que ambas casillas estén seleccionadas
-        const mayorEdad = document.querySelector('input[name="mayor_edad"]').checked;
-        const basesLegales = document.querySelector('input[name="bases_legales"]').checked;
-
-        if (!mayorEdad || !basesLegales) {
-          showModal('ATENCIÓN', 'Debes ser mayor de 16 años y aceptar las bases legales para continuar.');
-          return;
-        }
-
-        try {
-          const response = await fetch('https://lacasera-backend.onrender.com/api/check-code', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ code: codigo })
-          });
-
-          const data = await response.json();
-
-          if (!data.success) {
-            // Si success es false, mostramos el mensaje de error (ej: código no válido o ya usado)
-            showModal('ATENCIÓN', data.message);
-          } else if (data.isPrize) {
-            // ¡Premio! Guardamos el código para la siguiente página
-            localStorage.setItem('winningCode', codigo);
-            window.location.href = 'premio.html';
-          } else {
-            showModal('NO PREMIADO', 'Código no premiado, vuelva a intentarlo con otro código.');
-          }
-
-        } catch (error) {
-          console.error('Error:', error);
-          showModal('ERROR', 'Hubo un problema al verificar el código. Inténtalo de nuevo más tarde.');
-        }
-      });
-
-      function showModal(title, message) {
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        // Accessibility: save focus, show modal, set aria-hidden, trap focus, handle Escape
-        _previousFocus = document.activeElement;
-        modal.setAttribute('aria-hidden', 'false');
-        modal.classList.add('active');
-
-        // Find focusable elements inside modal
-        const focusable = modal.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
-        const focusableArr = Array.prototype.slice.call(focusable);
-        const firstFocusable = focusableArr[0];
-        const lastFocusable = focusableArr[focusableArr.length - 1];
-
-        // Focus the close button for immediate keyboard access
-        if (closeModal) closeModal.focus();
-
-        _onKeyDown = function (e) {
-          if (e.key === 'Escape') {
-            e.preventDefault();
-            closeAndReset();
-            return;
-          }
-
-          if (e.key === 'Tab' && focusableArr.length > 0) {
-            // Trap focus within modal
-            if (e.shiftKey) { // shift + tab
-              if (document.activeElement === firstFocusable) {
-                e.preventDefault();
-                lastFocusable.focus();
-              }
-            } else { // tab
-              if (document.activeElement === lastFocusable) {
-                e.preventDefault();
-                firstFocusable.focus();
-              }
-            }
-          }
-        };
-
-        document.addEventListener('keydown', _onKeyDown);
+    // 2. Sticky Navbar Effect
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('shadow-xl', 'bg-opacity-95');
+      } else {
+        navbar.classList.remove('shadow-xl', 'bg-opacity-95');
       }
     });
+
+    // 3. Mobile Menu Toggle
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // 4. Bubble Generator (Visual Effect)
+    function initBubbles() {
+      const bubbleCount = 15;
+      for (let i = 0; i < bubbleCount; i++) {
+        createBubble();
+      }
+    }
+
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble', 'animate-bubble');
+
+      // Random Size
+      const size = Math.random() * 20 + 10;
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+
+      // Random Position
+      bubble.style.left = `${Math.random() * 100}%`;
+
+      // Random Delay
+      bubble.style.animationDelay = `${Math.random() * 5}s`;
+
+      bubblesContainer.appendChild(bubble);
+    }
+
+    // --- Data Visualization (Chart.js) ---
+    function initChart() {
+      const ctx = document.getElementById('prizesChart').getContext('2d');
+
+      // Chart Configuration
+      const config = {
+        type: 'doughnut',
+        data: {
+          labels: state.prizesData.labels,
+          datasets: [{
+            label: 'Distribución de Premios',
+            data: state.prizesData.data,
+            backgroundColor: [
+              '#E3001B', // Red
+              '#FFD700', // Yellow/Gold
+              '#4A90E2', // Blue
+              '#E0E0E0'  // Grey
+            ],
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: {
+                  family: "'Open Sans', sans-serif"
+                },
+                usePointStyle: true
+              }
+            },
+            title: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return ` ${context.label}: ${context.raw}% de disponibilidad`;
+                }
+              }
+            }
+          },
+          cutout: '60%'
+        }
+      };
+
+      state.chartInstance = new Chart(ctx, config);
+    }
+
+    // Interactive: Refresh Stats
+    document.getElementById('refresh-stats').addEventListener('click', function () {
+      // Simulate data update
+      const btn = this;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+
+      setTimeout(() => {
+        // Randomize data slightly
+        const newData = [
+          Math.floor(Math.random() * 30) + 20,
+          Math.floor(Math.random() * 30) + 20,
+          Math.floor(Math.random() * 10) + 1,
+          Math.floor(Math.random() * 20) + 5
+        ];
+
+        state.chartInstance.data.datasets[0].data = newData;
+        state.chartInstance.update();
+
+        // Update counter text
+        state.prizesLeft -= Math.floor(Math.random() * 5);
+        document.getElementById('prizes-left-counter').innerText = state.prizesLeft.toLocaleString();
+
+        btn.innerHTML = originalText;
+      }, 1000);
+    });
+
+    // --- Modal & Form Logic ---
+    function setupEventListeners() {
+      // Open Modal on CTA Click
+      ctaButtons.forEach(btn => {
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.classList.remove('hidden');
+          });
+        }
+      });
+
+      // Close Modal
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+
+      modalOverlay.addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+
+      // --- Form Interactivity ---
+      const promoForm = document.getElementById('promo-form');
+      const promoCodeInput = document.getElementById('promo-code');
+      const checkCodeBtn = document.getElementById('check-code-btn');
+      const successState = document.getElementById('success-state');
+      const resetFormBtn = document.getElementById('reset-form-btn');
+
+      if (promoForm && promoCodeInput && checkCodeBtn && successState && resetFormBtn) {
+        promoCodeInput.addEventListener('input', (e) => {
+          checkCodeBtn.disabled = !e.target.value.trim();
+        });
+
+        promoForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          if (!promoCodeInput.value.trim()) return;
+
+          // Simulate loading state
+          const originalBtnContent = checkCodeBtn.innerHTML;
+          checkCodeBtn.disabled = true;
+          promoCodeInput.disabled = true;
+          checkCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> COMPROBANDO...';
+
+          // Simulate API call delay
+          setTimeout(() => {
+            promoForm.classList.add('hidden');
+            successState.classList.remove('hidden');
+
+            checkCodeBtn.innerHTML = originalBtnContent;
+            checkCodeBtn.disabled = false;
+            promoCodeInput.disabled = false;
+          }, 1500);
+        });
+
+        resetFormBtn.addEventListener('click', () => {
+          promoCodeInput.value = '';
+          checkCodeBtn.disabled = true;
+          successState.classList.add('hidden');
+          promoForm.classList.remove('hidden');
+        });
+      }
+    }
+
   </script>
+</body>
 
 </html>
