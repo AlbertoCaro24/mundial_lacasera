@@ -142,7 +142,8 @@ router.post('/register-winner', async (req, res) => {
         // Actualizamos el código con resultado definitivo
         await Code.findByIdAndUpdate(codeDoc._id, { $set: { result: 'WIN' } });
 
-        // Enviar email de confirmación al ganador
+        // Enviar email de confirmación al ganador en SEGUNDO PLANO (sin await)
+        // para que la interfaz del usuario responda inmediatamente sin quedarse "pensando"
         try {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
@@ -159,11 +160,14 @@ router.post('/register-winner', async (req, res) => {
                 `
             };
 
-            await emailTransporter.sendMail(mailOptions);
-            winston.info(`📧 Email de confirmación enviado a ${email}`);
-        } catch (emailError) {
-            winston.error('Error al enviar email de confirmación:', emailError);
-            // No fallar la respuesta por error de email
+            emailTransporter.sendMail(mailOptions).then(() => {
+                winston.info(`📧 Email de confirmación enviado a ${email}`);
+            }).catch((emailError) => {
+                winston.error('Error enviando email en 2º plano:', emailError);
+            });
+
+        } catch (syncError) {
+            winston.error('Error síncrono configurando email:', syncError);
         }
 
         winston.info(`🎉 ¡Nuevo ganador registrado! ${nombre} ${apellidos} ganó ${codeDoc.prizeType}`, { code: cleanCode, nombre, apellidos, email, ip: req.ip });
