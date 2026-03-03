@@ -18,14 +18,9 @@ const emailTransporter = nodemailer.createTransport({
     }
 });
 
-// Verificar conexión de email al iniciar
-emailTransporter.verify((error, success) => {
-    if (error) {
-        logger.error('Error en configuración de email:', error);
-    } else {
-        logger.info('Servidor de email listo para enviar mensajes');
-    }
-});
+// Omitimos la verificación estricta de transporte de email al inicio para evitar
+// timeouts de conexión (ETIMEDOUT) que bloqueen el despliegue en Render o servicios en la nube.
+// El envío se probará dinámicamente durante el propio momento de la petición /register-winner
 
 // Configurar Winston para logging avanzado
 const logger = winston.createLogger({
