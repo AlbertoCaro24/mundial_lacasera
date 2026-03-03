@@ -252,7 +252,7 @@
         <!-- MAIN ACTION FORM -->
         <div class="mt-8 bg-white/10 backdrop-blur-md border border-white/20 p-5 md:p-8 rounded-3xl shadow-2xl">
           <!-- Form View -->
-          <form id="promo-form" class="flex flex-col gap-4" onsubmit="return false;">
+          <form id="promo-form" class="flex flex-col gap-4">
             <div class="relative">
               <input type="text" id="promo-code" placeholder="Ej: LCSA-1234-SPN"
                 class="w-full bg-white text-gray-900 text-center font-mono text-xl md:text-2xl font-bold rounded-2xl py-4 px-4 shadow-inner focus:outline-none focus:ring-4 focus:ring-brand-yellow/50 transition-all placeholder:text-gray-400 placeholder:font-sans placeholder:font-normal placeholder:text-base uppercase" />
@@ -679,7 +679,7 @@
 
       if (promoForm && promoCodeInput && checkCodeBtn && successState && resetFormBtn) {
         promoCodeInput.addEventListener('input', (e) => {
-          checkCodeBtn.disabled = !e.target.value.trim();
+          checkCodeBtn.disabled = e.target.value.trim() === '';
         });
 
         promoForm.addEventListener('submit', async (e) => {
