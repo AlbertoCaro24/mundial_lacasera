@@ -680,10 +680,8 @@
       const promoForm = document.getElementById('promo-form');
       const promoCodeInput = document.getElementById('promo-code');
       const checkCodeBtn = document.getElementById('check-code-btn');
-      const successState = document.getElementById('success-state');
-      const resetFormBtn = document.getElementById('reset-form-btn');
 
-      if (promoForm && promoCodeInput && checkCodeBtn && successState && resetFormBtn) {
+      if (promoForm && promoCodeInput && checkCodeBtn) {
         promoCodeInput.addEventListener('input', (e) => {
           checkCodeBtn.disabled = e.target.value.trim() === '';
         });
@@ -766,13 +764,6 @@
             checkCodeBtn.disabled = false;
             promoCodeInput.disabled = false;
           }
-        });
-
-        resetFormBtn.addEventListener('click', () => {
-          promoCodeInput.value = '';
-          checkCodeBtn.disabled = true;
-          successState.classList.add('hidden');
-          promoForm.classList.remove('hidden');
         });
       }
     }
