@@ -701,7 +701,7 @@
           checkCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> COMPROBANDO...';
 
           try {
-            const API_BASE = window.__API_BASE__ || 'http://localhost:3000'; // Default a localhost para pruebas locales desde el archivo
+            const API_BASE = window.__API_BASE__ || 'https://lacasera-backend.onrender.com'; // Backend en producción
             const response = await fetch(`${API_BASE}/api/check-code`, {
               method: 'POST',
               headers: {

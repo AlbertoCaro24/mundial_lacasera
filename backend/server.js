@@ -47,10 +47,11 @@ const logger = winston.createLogger({
 app.use(helmet());
 
 // CORS: Permite que tu frontend (web) hable con este backend
-// Usa FRONTEND_URL en el .env para restringir el origen (ej: https://tusitio.com)
-const FRONTEND_URL = process.env.FRONTEND_URL || '*';
-const corsOptions = FRONTEND_URL === '*' ? {} : { origin: FRONTEND_URL, optionsSuccessStatus: 200 };
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 // JSON: Entender datos que vienen en formato JSON
 app.use(express.json());
