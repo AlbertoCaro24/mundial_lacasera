@@ -46,15 +46,25 @@ router.post('/check-code', async (req, res) => {
         }
 
         // CASO B: El código ya se usó (¡Alerta de pillo!)
-        if (foundCode.used) {
+        if (foundCode.used && foundCode.result !== 'PENDING') {
             return res.json({
                 success: false,
-                message: "Este código ya ha sido canjeado."
+                message: "Este código ya ha sido canjeado o está siendo procesado."
             });
         }
 
-        // CASO C: Código válido y sin usar
-        // Devolvemos si tiene premio o no
+        // SI ES LA PRIMERA VEZ: Lo marcamos como usado (sea premiado o no) para evitar re-usos en el futuro
+        if (!foundCode.used) {
+            foundCode.used = true;
+            foundCode.usedAt = new Date();
+            foundCode.ip = req.ip;
+            foundCode.userAgent = req.get('User-Agent') || '';
+            // Si tiene premio, queda PENDIENTE de que el usuario envíe sus datos en premio.html. Si no, LOSE directo.
+            foundCode.result = foundCode.isPrize ? 'PENDING' : 'LOSE';
+            await foundCode.save();
+        }
+
+        // CASO C: Devolvemos si tiene premio o no
         winston.info('Código validado', { code: cleanCode, isPrize: foundCode.isPrize, prizeType: foundCode.prizeType, ip: req.ip });
         return res.json({
             success: true,
@@ -85,15 +95,13 @@ router.post('/register-winner', async (req, res) => {
         const winnerId = new mongoose.Types.ObjectId();
 
         const codeDoc = await Code.findOneAndUpdate(
-            { code: cleanCode, used: false }, // Filtro: debe existir y NO estar usado
+            { code: cleanCode, result: 'PENDING' }, // Filtro: ahora buscaremos aquellos que quedaron pendientes tras /check-code
             {
                 $set: {
-                    used: true,
-                    usedAt: new Date(),
                     userId: winnerId,
-                    ip: req.ip,
+                    ip: req.ip, // Guardamos la IP definitiva en el momento del registro también
                     userAgent: req.get('User-Agent') || '',
-                    result: 'PENDING'
+                    // Dejamos en result: PENDING temporalmente, se pasa a WIN al final
                 }
             },
             { new: true } // Devuelve el documento actualizado
@@ -121,9 +129,12 @@ router.post('/register-winner', async (req, res) => {
             apellidos,
             email,
             telefono,
+            ciudad: req.body.ciudad, // El formulario envía la ciudad
             direccion,
             winningCode: cleanCode,
-            prizeWon: codeDoc.prizeType
+            prizeWon: codeDoc.prizeType,
+            ip: req.ip,
+            userAgent: req.get('User-Agent') || ''
         });
 
         await newWinner.save();
@@ -187,7 +198,7 @@ router.get('/descargar-ganadores', async (req, res) => {
 
         // 3. Crear el CSV (manual para no instalar más librerías)
         // Cabeceras
-        let csv = "Nombre,Apellidos,Email,Telefono,Direccion,Premio,Codigo,Fecha\n";
+        let csv = "Nombre,Apellidos,Email,Telefono,Ciudad,Direccion,Premio,Codigo,Fecha,IP,Navegador\n";
 
         // Filas
         winners.forEach(w => {
@@ -196,7 +207,7 @@ router.get('/descargar-ganadores', async (req, res) => {
 
             const fecha = w.createdAt ? w.createdAt.toISOString().split('T')[0] : "";
 
-            csv += `${clean(w.nombre)},${clean(w.apellidos)},${clean(w.email)},${clean(w.telefono)},${clean(w.direccion)},${clean(w.prizeWon)},${clean(w.winningCode)},${fecha}\n`;
+            csv += `${clean(w.nombre)},${clean(w.apellidos)},${clean(w.email)},${clean(w.telefono)},${clean(w.ciudad)},${clean(w.direccion)},${clean(w.prizeWon)},${clean(w.winningCode)},${fecha},${clean(w.ip)},${clean(w.userAgent)}\n`;
         });
 
         // 4. Enviar el archivo

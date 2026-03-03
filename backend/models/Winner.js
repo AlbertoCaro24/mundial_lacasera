@@ -9,11 +9,16 @@ const WinnerSchema = new mongoose.Schema({
     apellidos: { type: String, required: true },
     email: { type: String, required: true },
     telefono: { type: String },
+    ciudad: { type: String },
     direccion: { type: String }, // Para enviar el premio
 
     // Relación con el código que usó
     winningCode: { type: String, required: true },
     prizeWon: { type: String, required: true }, // Qué ganó
+
+    // Datos de procedencia y auditoría de la conexión
+    ip: { type: String },
+    userAgent: { type: String },
 
     // Fecha del registro
     createdAt: { type: Date, default: Date.now }
