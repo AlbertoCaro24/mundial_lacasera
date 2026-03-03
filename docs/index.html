@@ -199,8 +199,11 @@
         <a href="#mecanica" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-darkRed">Cómo
           Participar</a>
         <a href="#premios" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-darkRed">Premios</a>
+        <a href="#productos"
+          class="block px-3 py-2 rounded-md text-base font-medium hover:bg-brand-darkRed">Productos</a>
         <a href="#cta"
-          class="block px-3 py-2 rounded-md text-base font-bold bg-white text-brand-red mt-4 text-center">¡PARTICIPA!</a>
+          class="block px-3 py-2 rounded-md text-base font-bold bg-white text-brand-red mt-4 text-center">¡PARTICIPA
+          YA!</a>
       </div>
     </div>
   </nav>
@@ -208,62 +211,85 @@
   <!-- Hero Section -->
   <section id="hero" class="relative pt-24 pb-12 lg:pt-32 lg:pb-24 overflow-hidden bg-brand-red">
     <!-- Background Elements -->
-    <div class="absolute inset-0 bg-cover"
-      style="background-image: url('estilos/FONDO NUEVO ROJA1.png'); background-position: center 75px; background-repeat: no-repeat;">
+    <div class="absolute inset-0 bg-[length:100%_auto] md:bg-cover"
+      style="background-image: url('estilos/FONDO NUEVO ROJA1.png'); background-position: center 96px; background-repeat: no-repeat;">
     </div>
     <div class="absolute inset-0 bg-black/20"></div> <!-- Slight overlay for text readability, optional -->
     <div id="bubbles-container" class="absolute inset-0 pointer-events-none z-0"></div>
 
-
-    </div>
-    </div>
-
     <!-- Hero Image Simulation -->
     <div class="relative flex justify-center lg:justify-end animate-float">
-      <div class="relative w-72 h-96 lg:w-96 lg:h-[500px] flex items-center justify-center overflow-hidden">
-        <!-- Bottle Image -->
-
-
+      <div
+        class="relative w-full h-[35vw] md:w-72 md:h-96 lg:w-96 lg:h-[500px] flex items-center justify-center overflow-hidden">
       </div>
     </div>
-    </div>
-    </div>
 
-    <!-- Wave Separator -->
-    <div class="absolute bottom-0 w-full leading-none z-10">
-      <svg class="block w-full h-12 sm:h-24" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path fill="#F9F7F2" fill-opacity="1"
-          d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-        </path>
-      </svg>
-    </div>
   </section>
 
-  <!-- Essence Section -->
-  <section id="essence" class="py-16 lg:py-24 bg-brand-cream">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-        <div class="relative mb-10 lg:mb-0 order-1 lg:order-2">
-          <!-- Polaroid Style Image Container -->
-          <div class="bg-white p-4 shadow-xl transform rotate-2 max-w-md mx-auto">
-            <div class="h-64 flex items-center justify-center overflow-hidden">
-              <img src="estilos/verano_postal.png" alt="Reunión Familiar en Verano" class="object-cover w-full h-full">
-            </div>
-          </div>
-        </div>
+  <!-- CTA & Footer Section -->
+  <section id="cta" class="relative py-24 bg-gray-900 overflow-hidden text-center">
+    <!-- Background Overlay Image Simulation -->
+    <div class="absolute inset-0 bg-gradient-to-r from-brand-red to-red-900 opacity-60 z-10"></div>
+    <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('estilos/fondo_formulario.png')">
+    </div>
 
-        <div class="order-2 lg:order-1">
-          <h2 class="text-3xl lg:text-4xl font-display font-bold text-brand-red mb-6">
-            Porque lo bueno, se comparte.
-          </h2>
-          <p class="text-lg text-[#002d72] mb-6 leading-relaxed">
-            No hay nada como el calor de los nuestros, las risas en la mesa y el frescor de La Casera.
-            Este año, queremos que cada brindis, cada comida familiar y cada aperitivo tenga premio.
-          </p>
-          <div class="p-6 bg-white rounded-xl shadow-md border-l-4 border-brand-red">
-            <p class="italic text-[#002d72] font-medium">
-              "Porque si estamos juntos, ya hemos ganado."
-            </p>
+    <div class="relative z-20 max-w-4xl mx-auto px-4">
+      <div class="w-full max-w-md md:max-w-2xl mx-auto text-center space-y-6">
+
+        <h2
+          class="text-4xl md:text-6xl font-display font-black text-white uppercase leading-[0.9] tracking-tight drop-shadow-xl">
+          <span class="block text-brand-yellow mb-2 text-2xl md:text-3xl font-bold tracking-normal font-sans">Gana
+            premios de la</span>
+          Selección Española
+        </h2>
+
+        <p class="text-white/80 text-lg md:text-xl leading-relaxed px-4 shadow-sm">
+          ¿Tienes un código de tu botella de La Casera® Tinto de Verano? Introdúcelo ahora y descubre al instante si has
+          ganado
+          equipaciones, balones y mucho más.
+        </p>
+
+        <!-- MAIN ACTION FORM -->
+        <div class="mt-8 bg-white/10 backdrop-blur-md border border-white/20 p-5 md:p-8 rounded-3xl shadow-2xl">
+          <!-- Form View -->
+          <form id="promo-form" class="flex flex-col gap-4" onsubmit="return false;">
+            <div class="relative">
+              <input type="text" id="promo-code" placeholder="Ej: LCSA-1234-SPN"
+                class="w-full bg-white text-gray-900 text-center font-mono text-xl md:text-2xl font-bold rounded-2xl py-4 px-4 shadow-inner focus:outline-none focus:ring-4 focus:ring-brand-yellow/50 transition-all placeholder:text-gray-400 placeholder:font-sans placeholder:font-normal placeholder:text-base uppercase" />
+            </div>
+
+            <button type="submit" id="check-code-btn"
+              class="group relative w-full flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darkRed font-black text-lg py-4 px-6 rounded-2xl shadow-[0_4px_0_rgb(180,83,9)] hover:shadow-[0_2px_0_rgb(180,83,9)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px] transition-all mt-2 disabled:opacity-70 disabled:cursor-not-allowed">
+              COMPROBAR CÓDIGO
+              <i class="fas fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+            </button>
+
+            <!-- Message Container for validation feedback -->
+            <div id="form-message"
+              class="hidden text-center text-sm font-bold mt-2 px-2 py-3 rounded-xl transition-all duration-300"></div>
+          </form>
+
+          <!-- Success State (Hidden by default, can be toggled via JS) -->
+          <div id="success-state" class="hidden py-6 flex flex-col items-center animate-fade-in">
+            <div
+              class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+              <i class="fas fa-check-circle text-white text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">¡Código Válido!</h3>
+            <p class="text-green-200 text-center text-sm">Revisa tu correo para descubrir tu premio.</p>
+            <button id="reset-form-btn" type="button" class="mt-6 text-sm text-brand-yellow font-bold hover:underline">
+              Introducir otro código
+            </button>
+          </div>
+
+          <!-- SECONDARY ACTION -->
+          <div class="mt-6 pt-5 border-t border-white/10">
+            <p class="text-white/80 text-lg text-center mb-3">¿Has comprado en supermercado y no tienes código?</p>
+            <button type="button"
+              class="w-full justify-center gap-2 bg-transparent border-2 border-white/30 hover:bg-white/10 text-white font-bold py-3 px-4 rounded-xl transition-colors flex items-center">
+              <i class="fas fa-ticket-alt"></i>
+              SUBIR MI TICKET DE COMPRA
+            </button>
           </div>
         </div>
       </div>
@@ -294,7 +320,7 @@
             <i class="fas fa-bottle-water text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
           </div>
           <h3 class="text-xl font-bold text-[#002d72] mb-3">PIDE LA CASERA® TINTO DE VERANO</h3>
-          <p class="text-[#002d72] text-sm">
+          <p class="text-[#002d72] text-lg">
             Pide La Casera® Tinto de Verano en tu establecimiento favorito.
           </p>
         </div>
@@ -311,7 +337,7 @@
             <i class="fas fa-qrcode text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
           </div>
           <h3 class="text-xl font-bold text-[#002d72] mb-3">ESCANEA EL QR</h3>
-          <p class="text-[#002d72] text-sm">
+          <p class="text-[#002d72] text-lg">
             Escanea el QR y entra a la promo.
           </p>
         </div>
@@ -328,7 +354,7 @@
             <i class="fas fa-keyboard text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
           </div>
           <h3 class="text-xl font-bold text-[#002d72] mb-3">CÓDIGO ALFANUMÉRICO</h3>
-          <p class="text-[#002d72] text-sm">
+          <p class="text-[#002d72] text-lg">
             Introduce el código alfanumérico que se recibes al pedir La Casera® Tinto de Verano.
           </p>
         </div>
@@ -345,7 +371,7 @@
             <i class="fas fa-gift text-5xl text-[#002d72] group-hover:text-brand-red transition"></i>
           </div>
           <h3 class="text-xl font-bold text-[#002d72] mb-3">GANA</h3>
-          <p class="text-[#002d72] text-sm">
+          <p class="text-[#002d72] text-lg">
             ¡Descubre al instante si has ganado! Miles de premios te esperan para tu verano.
           </p>
         </div>
@@ -400,66 +426,31 @@
     </div>
   </section>
 
-  <!-- CTA & Footer Section -->
-  <section id="cta" class="relative py-24 bg-gray-900 overflow-hidden text-center">
-    <!-- Background Overlay Image Simulation -->
-    <div class="absolute inset-0 bg-gradient-to-r from-brand-red to-red-900 opacity-60 z-10"></div>
-    <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('estilos/fondo_formulario.png')">
-    </div>
 
-    <div class="relative z-20 max-w-4xl mx-auto px-4">
-      <div class="w-full max-w-md md:max-w-2xl mx-auto text-center space-y-6">
-
-        <h2
-          class="text-4xl md:text-6xl font-display font-black text-white uppercase leading-[0.9] tracking-tight drop-shadow-xl">
-          <span class="block text-brand-yellow mb-2 text-2xl md:text-3xl font-bold tracking-normal font-sans">Gana
-            premios de la</span>
-          Selección Española
-        </h2>
-
-        <p class="text-white/80 text-sm md:text-base leading-relaxed px-4 shadow-sm">
-          ¿Tienes un código de tu botella de La Casera® Tinto de Verano? Introdúcelo ahora y descubre al instante si has
-          ganado
-          equipaciones, balones y mucho más.
-        </p>
-
-        <!-- MAIN ACTION FORM -->
-        <div class="mt-8 bg-white/10 backdrop-blur-md border border-white/20 p-5 md:p-8 rounded-3xl shadow-2xl">
-          <!-- Form View -->
-          <form id="promo-form" class="flex flex-col gap-4">
-            <div class="relative">
-              <input type="text" id="promo-code" placeholder="Ej: LCSA-1234-SPN"
-                class="w-full bg-white text-gray-900 text-center font-mono text-xl md:text-2xl font-bold rounded-2xl py-4 px-4 shadow-inner focus:outline-none focus:ring-4 focus:ring-brand-yellow/50 transition-all placeholder:text-gray-400 placeholder:font-sans placeholder:font-normal placeholder:text-base uppercase" />
+  <section id="essence" class="py-16 lg:py-24 bg-brand-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+        <div class="relative mb-10 lg:mb-0 order-1 lg:order-2">
+          <!-- Polaroid Style Image Container -->
+          <div class="bg-white p-4 shadow-xl transform rotate-2 max-w-md mx-auto">
+            <div class="h-64 flex items-center justify-center overflow-hidden">
+              <img src="estilos/verano_postal.png" alt="Reunión Familiar en Verano" class="object-cover w-full h-full">
             </div>
-
-            <button type="submit" id="check-code-btn"
-              class="group relative w-full flex items-center justify-center gap-2 bg-brand-yellow hover:bg-yellow-300 text-brand-darkRed font-black text-lg py-4 px-6 rounded-2xl shadow-[0_4px_0_rgb(180,83,9)] hover:shadow-[0_2px_0_rgb(180,83,9)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px] transition-all mt-2">
-              COMPROBAR CÓDIGO
-              <i class="fas fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
-            </button>
-          </form>
-
-          <!-- Success State (Hidden by default, can be toggled via JS) -->
-          <div id="success-state" class="hidden py-6 flex flex-col items-center animate-fade-in">
-            <div
-              class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
-              <i class="fas fa-check-circle text-white text-3xl"></i>
-            </div>
-            <h3 class="text-2xl font-bold text-white mb-2">¡Código Válido!</h3>
-            <p class="text-green-200 text-center text-sm">Revisa tu correo para descubrir tu premio.</p>
-            <button id="reset-form-btn" type="button" class="mt-6 text-sm text-brand-yellow font-bold hover:underline">
-              Introducir otro código
-            </button>
           </div>
+        </div>
 
-          <!-- SECONDARY ACTION -->
-          <div class="mt-6 pt-5 border-t border-white/10">
-            <p class="text-white/80 text-xs text-center mb-3">¿Has comprado en supermercado y no tienes código?</p>
-            <button type="button"
-              class="w-full justify-center gap-2 bg-transparent border-2 border-white/30 hover:bg-white/10 text-white font-bold py-3 px-4 rounded-xl transition-colors flex items-center">
-              <i class="fas fa-ticket-alt"></i>
-              SUBIR MI TICKET DE COMPRA
-            </button>
+        <div class="order-2 lg:order-1">
+          <h2 class="text-3xl lg:text-4xl font-display font-bold text-brand-red mb-6">
+            Porque lo bueno, se comparte.
+          </h2>
+          <p class="text-lg text-[#002d72] mb-6 leading-relaxed">
+            No hay nada como el calor de los nuestros, las risas en la mesa y el frescor de La Casera.
+            Este año, queremos que cada brindis, cada comida familiar y cada aperitivo tenga premio.
+          </p>
+          <div class="p-6 bg-white rounded-xl shadow-md border-l-4 border-brand-red">
+            <p class="italic text-[#002d72] font-medium">
+              "Porque si estamos juntos, ya hemos ganado."
+            </p>
           </div>
         </div>
       </div>
@@ -496,41 +487,6 @@
     </div>
   </footer>
 
-  <!-- Modal Simulation -->
-  <div id="modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-    aria-modal="true">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-overlay">
-      </div>
-      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-      <div
-        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div class="sm:flex sm:items-start">
-            <div
-              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <i class="fas fa-info text-brand-red"></i>
-            </div>
-            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 class="text-lg leading-6 font-medium text-[#002d72]" id="modal-title">Simulación de Registro</h3>
-              <div class="mt-2">
-                <p class="text-sm text-[#002d72]">
-                  En la campaña real, este botón llevaría al formulario de registro o abriría la API de WhatsApp.
-                  ¡Gracias por probar la demo!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button type="button" id="close-modal"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-red text-base font-medium text-white hover:bg-brand-darkRed focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-            Entendido
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- JavaScript Logic -->
   <script>
@@ -726,26 +682,84 @@
           checkCodeBtn.disabled = !e.target.value.trim();
         });
 
-        promoForm.addEventListener('submit', (e) => {
+        promoForm.addEventListener('submit', async (e) => {
           e.preventDefault();
 
-          if (!promoCodeInput.value.trim()) return;
+          const codeValue = promoCodeInput.value.trim().toUpperCase();
+          if (!codeValue) return;
 
-          // Simulate loading state
+          // Message Container
+          const formMessage = document.getElementById('form-message');
+          formMessage.classList.add('hidden');
+          formMessage.className = 'hidden text-center text-sm font-bold mt-2 px-2 py-3 rounded-xl transition-all duration-300';
+          formMessage.innerHTML = '';
+
+          // Loading state
           const originalBtnContent = checkCodeBtn.innerHTML;
           checkCodeBtn.disabled = true;
           promoCodeInput.disabled = true;
           checkCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> COMPROBANDO...';
 
-          // Simulate API call delay
-          setTimeout(() => {
-            promoForm.classList.add('hidden');
-            successState.classList.remove('hidden');
+          try {
+            const API_BASE = window.__API_BASE__ || 'http://localhost:3000'; // Default a localhost para pruebas locales desde el archivo
+            const response = await fetch(`${API_BASE}/api/check-code`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ code: codeValue })
+            });
+
+            const result = await response.json();
+
+            // Handle UI feedback
+            if (response.ok && result.success) {
+              if (result.isPrize) {
+                // CÓDIGO VÁLIDO Y PREMIADO
+                formMessage.classList.remove('hidden');
+                formMessage.classList.add('bg-green-500/20', 'text-green-300', 'border', 'border-green-500/30');
+                formMessage.innerHTML = '<i class="fas fa-check-circle mr-2"></i> ¡Enhorabuena! Tu código ha sido premiado.';
+
+                // Save the winning code to localStorage
+                localStorage.setItem('winningCode', codeValue);
+
+                // Redirect to prize claim page after showing success message
+                setTimeout(() => {
+                  window.location.href = 'premio.html';
+                }, 2500);
+              } else {
+                // CÓDIGO VÁLIDO PERO SIN PREMIO
+                formMessage.classList.remove('hidden');
+                formMessage.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/30');
+                formMessage.innerHTML = '<i class="fas fa-times-circle mr-2"></i> Código no premiado. Gracias por participar. Inténtelo de nuevo con otro código.';
+
+                // Restore form immediately for another try
+                checkCodeBtn.innerHTML = originalBtnContent;
+                checkCodeBtn.disabled = false;
+                promoCodeInput.disabled = false;
+                promoCodeInput.value = '';
+              }
+            } else {
+              // ERRORES DEL SERVIDOR ("Código no válido", "Este código ya ha sido canjeado")
+              formMessage.classList.remove('hidden');
+              formMessage.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/30');
+              formMessage.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i> ${result.message || 'Error de validación.'}`;
+
+              checkCodeBtn.innerHTML = originalBtnContent;
+              checkCodeBtn.disabled = false;
+              promoCodeInput.disabled = false;
+            }
+
+          } catch (error) {
+            console.error('Fetch error:', error);
+            formMessage.classList.remove('hidden');
+            formMessage.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/30');
+            formMessage.innerHTML = '<i class="fas fa-wifi mr-2"></i> Error de conexión. Por favor, inténtelo de nuevo más tarde.';
 
             checkCodeBtn.innerHTML = originalBtnContent;
             checkCodeBtn.disabled = false;
             promoCodeInput.disabled = false;
-          }, 1500);
+          }
         });
 
         resetFormBtn.addEventListener('click', () => {
