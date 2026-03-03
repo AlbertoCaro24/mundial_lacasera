@@ -571,7 +571,10 @@
 
     // --- Data Visualization (Chart.js) ---
     function initChart() {
-      const ctx = document.getElementById('prizesChart').getContext('2d');
+      const canvas = document.getElementById('prizesChart');
+      if (!canvas) return; // Prevent JS from crashing if chart section was removed
+
+      const ctx = canvas.getContext('2d');
 
       // Chart Configuration
       const config = {
@@ -623,31 +626,34 @@
     }
 
     // Interactive: Refresh Stats
-    document.getElementById('refresh-stats').addEventListener('click', function () {
-      // Simulate data update
-      const btn = this;
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+    const refreshBtn = document.getElementById('refresh-stats');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', function () {
+        // Simulate data update
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
 
-      setTimeout(() => {
-        // Randomize data slightly
-        const newData = [
-          Math.floor(Math.random() * 30) + 20,
-          Math.floor(Math.random() * 30) + 20,
-          Math.floor(Math.random() * 10) + 1,
-          Math.floor(Math.random() * 20) + 5
-        ];
+        setTimeout(() => {
+          // Randomize data slightly
+          const newData = [
+            Math.floor(Math.random() * 30) + 20,
+            Math.floor(Math.random() * 30) + 20,
+            Math.floor(Math.random() * 10) + 1,
+            Math.floor(Math.random() * 20) + 5
+          ];
 
-        state.chartInstance.data.datasets[0].data = newData;
-        state.chartInstance.update();
+          state.chartInstance.data.datasets[0].data = newData;
+          state.chartInstance.update();
 
-        // Update counter text
-        state.prizesLeft -= Math.floor(Math.random() * 5);
-        document.getElementById('prizes-left-counter').innerText = state.prizesLeft.toLocaleString();
+          // Update counter text
+          state.prizesLeft -= Math.floor(Math.random() * 5);
+          document.getElementById('prizes-left-counter').innerText = state.prizesLeft.toLocaleString();
 
-        btn.innerHTML = originalText;
-      }, 1000);
-    });
+          btn.innerHTML = originalText;
+        }, 1000);
+      });
+    }
 
     // --- Modal & Form Logic ---
     function setupEventListeners() {
