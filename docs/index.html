@@ -505,10 +505,6 @@
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const bubblesContainer = document.getElementById('bubbles-container');
-    const modal = document.getElementById('modal');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const closeModalBtn = document.getElementById('close-modal');
-    const ctaButtons = [document.getElementById('cta-whatsapp'), document.getElementById('cta-web')];
 
     // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
@@ -657,25 +653,6 @@
 
     // --- Modal & Form Logic ---
     function setupEventListeners() {
-      // Open Modal on CTA Click
-      ctaButtons.forEach(btn => {
-        if (btn) {
-          btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            modal.classList.remove('hidden');
-          });
-        }
-      });
-
-      // Close Modal
-      closeModalBtn.addEventListener('click', () => {
-        modal.classList.add('hidden');
-      });
-
-      modalOverlay.addEventListener('click', () => {
-        modal.classList.add('hidden');
-      });
-
       // --- Form Interactivity ---
       const promoForm = document.getElementById('promo-form');
       const promoCodeInput = document.getElementById('promo-code');
